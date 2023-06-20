@@ -41,7 +41,7 @@ class _OTPVerificationState extends State<OTPVerification> {
               height: 20,
             ),
             Text(
-              'An OTP has been sent to example@example.com Kindly fill in the OTP below to verify your account.',
+              'An OTP has been sent to your email address.Kindly fill in the OTP below to verify your account.',
               style: GoogleFonts.openSans(
                   fontSize: 16,
                   fontWeight: FontWeight.w400,

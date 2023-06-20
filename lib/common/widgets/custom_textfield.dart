@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
-  final IconData suffixIcon;
+  final String? Function(String?)? validator;
+    final Widget? suffixIcon;
+  final ValueChanged<String>? onChanged;
+  final bool obscureText;
 
   CustomTextField({
     required this.controller,
     required this.hintText,
     required this.suffixIcon,
+    this.validator,
+    this.onChanged,
+    this.obscureText = false,
   });
 
   @override
@@ -31,7 +37,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
           labelStyle: const TextStyle(color: Colors.white),
           fillColor: Colors.white,
           hintStyle: const TextStyle(color: Colors.white),
-          suffixIcon: Icon(widget.suffixIcon, color: Colors.white),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.0),
             borderSide: const BorderSide(color: Colors.white),
@@ -49,6 +54,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             // Update the state if needed
           });
         },
+        
         onTap: () {
           setState(() {
             _isFocused = true;

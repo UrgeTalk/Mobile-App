@@ -173,7 +173,7 @@ class _HomeState extends State<Home> {
                           color: logoColor)),
                 ],
               ),
-                            Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -207,7 +207,6 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
@@ -253,7 +252,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-    Widget trending() {
+  Widget trending() {
     return SizedBox(
       width: 250,
       child: Column(children: [

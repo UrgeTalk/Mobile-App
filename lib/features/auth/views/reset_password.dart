@@ -57,16 +57,52 @@ class _ResetPasswordState extends State<ResetPassword> {
               height: 40,
             ),
             CustomTextField(
-                controller: _passwordController,
-                hintText: 'New Password',
-                suffixIcon: Icons.remove_red_eye),
+              controller: _passwordController,
+              hintText: 'New Password',
+              suffixIcon: IconButton(
+                icon: Icon(
+                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    obscurePassword = !obscurePassword;
+                  });
+                },
+              ),
+              obscureText: !obscurePassword,
+              validator: (value) {
+                if (value != '') {
+                  return null;
+                } else {
+                  return "Field cannot be empty";
+                }
+              },
+            ),
             const SizedBox(
               height: 30,
             ),
             CustomTextField(
-                controller: _confirmPasswordController,
-                hintText: 'Confirm New Password',
-                suffixIcon: Icons.remove_red_eye),
+              controller: _confirmPasswordController,
+              hintText: 'Confirm New Password',
+              suffixIcon: IconButton(
+                icon: Icon(
+                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white),
+                onPressed: () {
+                  setState(() {
+                    obscurePassword = !obscurePassword;
+                  });
+                },
+              ),
+              obscureText: !obscurePassword,
+              validator: (value) {
+                if (value != '') {
+                  return null;
+                } else {
+                  return "Field cannot be empty";
+                }
+              },
+            ),
             const SizedBox(
               height: 60,
             ),

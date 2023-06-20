@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/common/widgets/custom_textfield.dart';
+import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/auth/views/login.dart';
 import 'package:urge/features/auth/views/otp_verification.dart';
 
@@ -22,6 +23,14 @@ class _RegisterState extends State<Register> {
       TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool obscurePassword = false;
+
+  final AuthController _authController = Get.put(AuthController());
+
+  bool validateEmail(String email) {
+    final valid_email = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return valid_email.hasMatch(email);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,18 +92,40 @@ class _RegisterState extends State<Register> {
                 children: [
                   Expanded(
                     child: CustomTextField(
-                        controller: _firstNameController,
-                        hintText: 'First Name',
-                        suffixIcon: Icons.person_outline),
+                      controller: _firstNameController,
+                      hintText: 'First Name',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.person_outline),
+                        onPressed: () {},
+                      ),
+                      validator: (value) {
+                        if (value == '') {
+                          return null;
+                        } else {
+                          return "Field cannot be empty";
+                        }
+                      },
+                    ),
                   ),
                   const SizedBox(
                     width: 10,
                   ),
                   Expanded(
                     child: CustomTextField(
-                        controller: _lastNameController,
-                        hintText: 'Last Name',
-                        suffixIcon: Icons.person_outline),
+                      controller: _lastNameController,
+                      hintText: 'Last Name',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.person_outline),
+                        onPressed: () {},
+                      ),
+                      validator: (value) {
+                        if (value == '') {
+                          return null;
+                        } else {
+                          return "Field cannot be empty";
+                        }
+                      },
+                    ),
                   )
                 ],
               ),
@@ -104,21 +135,71 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                   controller: _emailController,
                   hintText: 'Email Address',
-                  suffixIcon: Icons.email),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.person_outline),
+                    onPressed: () {},
+                  ),
+                  onChanged: (val) {
+                    validateEmail(val);
+                  },
+                  validator: (value) {
+                    if (value == '') {
+                      return "Field cannot be empty";
+                    } else {
+                      bool result = validateEmail(value!);
+                      if (result) {
+                        return null;
+                      } else {
+                        return "Email format not correct";
+                      }
+                    }
+                  }),
               const SizedBox(
                 height: 25,
               ),
               CustomTextField(
-                  controller: _passwordController,
-                  hintText: 'Password',
-                  suffixIcon: Icons.remove_red_eye),
+                controller: _passwordController,
+                hintText: 'Password',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.remove_red_eye),
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                ),
+                obscureText: !obscurePassword,
+                validator: (value) {
+                  if (value != '') {
+                    return null;
+                  } else {
+                    return "Field cannot be empty";
+                  }
+                },
+              ),
               const SizedBox(
                 height: 25,
               ),
               CustomTextField(
-                  controller: _confirmPasswordController,
-                  hintText: 'Confirm Password',
-                  suffixIcon: Icons.remove_red_eye),
+                controller: _confirmPasswordController,
+                hintText: 'Confirm Password',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.remove_red_eye),
+                  onPressed: () {
+                    setState(() {
+                      obscurePassword = !obscurePassword;
+                    });
+                  },
+                ),
+                obscureText: !obscurePassword,
+                validator: (value) {
+                  if (value != '') {
+                    return null;
+                  } else {
+                    return "Field cannot be empty";
+                  }
+                },
+              ),
               const SizedBox(
                 height: 35,
               ),

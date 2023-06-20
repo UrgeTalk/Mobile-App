@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:urge/common/helpers/custom_svg.dart';
 import 'package:urge/common/widgets/colors.dart';
+import 'package:urge/features/dashboard/views/member.dart';
 import 'package:urge/features/home/views/home.dart';
 import 'package:urge/features/events/views/events.dart';
 import 'package:urge/features/search/views/search.dart';
@@ -17,7 +18,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int pageIndex = 0;
 
-  List<Widget> pages = const [Home(), Events(), Search(), Dashboard()];
+  List<Widget> pages = const [Home(), Events(), Search(), Member()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

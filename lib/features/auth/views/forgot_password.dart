@@ -61,7 +61,25 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             CustomTextField(
                 controller: _emailController,
                 hintText: 'Email Address',
-                suffixIcon: Icons.email_outlined),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.email_outlined),
+                  onPressed: () {},
+                ),
+                onChanged: (val) {
+                  validateEmail(val);
+                },
+                validator: (value) {
+                  if (value == '') {
+                    return "Field cannot be empty";
+                  } else {
+                    bool result = validateEmail(value!);
+                    if (result) {
+                      return null;
+                    } else {
+                      return "Email format not correct";
+                    }
+                  }
+                }),
             const SizedBox(
               height: 60,
             ),
