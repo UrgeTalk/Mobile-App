@@ -22,7 +22,7 @@ class _SearchState extends State<Search> {
           child: ListView(
             children: [
               const SizedBox(
-                height: 40,
+                height: 20,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
