@@ -171,8 +171,8 @@ class _LoginState extends State<Login> {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _authController.login(
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim());
                             }
                           }),
                       const SizedBox(
