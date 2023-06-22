@@ -97,7 +97,7 @@ class BaseClient {
     // break;
       case 400:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
-        throw BadRequestException(responseJson['detail'] ?? 'An error occurred',
+        throw BadRequestException(responseJson['message'] ?? 'An error occurred',
             response.request!.url.toString());
       case 401:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));

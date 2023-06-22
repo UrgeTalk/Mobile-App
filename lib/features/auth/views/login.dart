@@ -95,6 +95,7 @@ class _LoginState extends State<Login> {
                           hintText: 'Email Address',
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.email_outlined),
+                            color: Colors.white,
                             onPressed: () {},
                           ),
                           onChanged: (val) {

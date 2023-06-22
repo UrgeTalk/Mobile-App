@@ -92,7 +92,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       fontWeight: FontWeight.w700),
                 ),
                 onPressed: () {
-                  Get.to(() => const OTPVerification());
+                 // Get.to(() => const OTPVerification());
                 }),
           ]),
         ),
