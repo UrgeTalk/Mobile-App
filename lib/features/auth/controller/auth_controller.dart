@@ -1,13 +1,16 @@
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urge/common/helpers/utils.dart';
+import 'package:urge/common/network/dialog_help.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:urge/common/network/base_controller.dart';
 import 'package:urge/common/widgets/bottom_nav.dart';
 import 'package:urge/features/auth/services/auth_service.dart';
+import 'package:urge/features/auth/views/login.dart';
+import 'package:urge/features/auth/views/otp_verification.dart';
 
 class AuthController extends GetxController with BaseController {
-
-    final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
 
   var isLoading = false.obs;
   var isSuccess = false.obs;
@@ -28,5 +31,37 @@ class AuthController extends GetxController with BaseController {
     });
   }
 
-  
+  void register(
+      {required String firstName,
+      required String lastName,
+      required String emailAddress,
+      required String password}) {
+    isLoading(true);
+    _authService
+        .signUp(firstName, lastName, emailAddress, password)
+        .then((value) {
+      if (value['status'] == 200) {
+        Get.to(() => OTPVerification(emailAddress: emailAddress));
+      }
+    }).catchError((e) {
+      isLoading(false);
+      print(e);
+      handleError(e);
+    });
+  }
+
+  void verifyEmail(String email, int otpCode) {
+    isLoading(true);
+    _authService.verifyEmail(email, otpCode).then((value) {
+      isLoading(true);
+      if (value['status'] == 200) {
+        isLoading(false);
+        Get.to(() => const Login());
+      } 
+    }).catchError((e) {
+      isLoading(false);
+      print(e);
+      handleError(e);
+    });
+  }
 }

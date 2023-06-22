@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/colors.dart';
+import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/common/widgets/custom_textfield.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
@@ -34,12 +35,16 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(
+        () => BlurryModalProgressHUD(
+          inAsyncCall: _authController.isLoading.value,
+           child: Scaffold(
       backgroundColor: appBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child: SafeArea(
           child: Form(
+            key: _formKey,
               child: ListView(
             children: [
               const SizedBox(
@@ -212,7 +217,13 @@ class _RegisterState extends State<Register> {
                         fontWeight: FontWeight.w700),
                   ),
                   onPressed: () {
-                    Get.to(() => const Login());
+                    if (_formKey.currentState!.validate()) {
+                      _authController.register(
+                          firstName: _firstNameController.text.trim(),
+                          lastName: _lastNameController.text.trim(),
+                          emailAddress: _emailController.text.trim(),
+                          password: _passwordController.text.trim());
+                    }
                   }),
               const SizedBox(
                 height: 20,
@@ -245,6 +256,6 @@ class _RegisterState extends State<Register> {
           )),
         ),
       ),
-    );
+    )));
   }
 }
