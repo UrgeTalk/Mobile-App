@@ -96,6 +96,7 @@ class _DonationState extends State<Donation> {
                       borderRadius: BorderRadius.circular(25.0),
                       border: Border.all(color: Colors.white)),
                   child: TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: _amountController,
                     decoration: const InputDecoration(
                       hintText: 'Amount',
@@ -115,6 +116,7 @@ class _DonationState extends State<Donation> {
                       borderRadius: BorderRadius.circular(15.0),
                       border: Border.all(color: Colors.white)),
                   child: TextField(
+                    style: const TextStyle(color: Colors.white),
                     controller: _noteController,
                     decoration: const InputDecoration(
                       hintText: 'Leave a note',

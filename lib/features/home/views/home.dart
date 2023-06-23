@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
           child: ListView(
             children: [
               const SizedBox(
-                height: 40,
+                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
