@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/features/events/controller/event_controller.dart';
+import 'package:urge/features/events/model/event_model.dart';
 import 'package:urge/features/events/views/event_details.dart';
-
 
 class Events extends StatefulWidget {
   const Events({super.key});
@@ -14,6 +15,15 @@ class Events extends StatefulWidget {
 }
 
 class _EventsState extends State<Events> {
+  final EventController _controller = Get.put(EventController());
+
+  @override
+  void initState() {
+    _controller.getAllEvents();
+    _controller.newEventList.value = _controller.eventList;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +46,9 @@ class _EventsState extends State<Events> {
         ),
         backgroundColor: appBackgroundColor,
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: SafeArea(
-            child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('See all upcoming events',
                     style: GoogleFonts.openSans(
@@ -56,139 +66,190 @@ class _EventsState extends State<Events> {
                 const SizedBox(
                   height: 5,
                 ),
-                              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                Expanded(
+                  child: Obx(() {
+                    if (_controller.isListLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (_controller.errorMessage.isNotEmpty) {
+                      return const Center(child: Text('An Error Occured'));
+                    } else if (_controller.newEventList.isEmpty) {
+                      return const Center(child: Text('No Event Found'));
+                    } else {
+                      return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _controller.newEventList.length,
+                          itemBuilder: ((context, index) {
+                            Event _model = _controller.newEventList[index];
+                            return featuredEvents(_model);
+                          }));
+                    }
+                  }),
+                ),
+                // Obx(() {
+                //   if (_controller.isListLoading.value) {
+                //     return const Center(child: CircularProgressIndicator());
+                //   } else if (_controller.errorMessage.isNotEmpty) {
+                //     return const Center(child: Text('An Error Occured'));
+                //   } else if (_controller.newEventList.isEmpty) {
+                //     return const Center(child: Text('No Event Found'));
+                //   } else {
+                //     return SingleChildScrollView(
+                //       scrollDirection: Axis.horizontal,
+                //       child: ListView.builder(
+                //           itemCount: _controller.newEventList.length,
+                //           itemBuilder: ((context, index) {
+                //             Event _model = _controller.newEventList[index];
+                //             return featuredEvents(_model);
+                //           })),
+                //     );
+                //   }
+                // }),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 0),
+                //   child: SingleChildScrollView(
+                //     scrollDirection: Axis.horizontal,
+                //     child: Row(
+                //       children: <Widget>[
+                //         featuredEvents(),
+                //         const SizedBox(
+                //           width: 10,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                const SizedBox(height: 10),
+                Text(
+                  'Upcoming Events',
+                  style: GoogleFonts.openSans(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: Obx(() {
+                    if (_controller.isListLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (_controller.errorMessage.isNotEmpty) {
+                      return const Center(child: Text('An Error Occured'));
+                    } else if (_controller.newEventList.isEmpty) {
+                      return const Center(child: Text('No Event Found'));
+                    } else {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: _controller.newEventList.length,
+                          itemBuilder: ((context, index) {
+                            Event _model = _controller.newEventList[index];
+                            return featuredEvents(_model);
+                          }));
+                    }
+                  }),
+                ),
+
+                // upcomingEvents(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // upcomingEvents(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // upcomingEvents(),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // upcomingEvents(),
+                // const SizedBox(
+                //   height: 10,
+                // )
+              ],
+            )));
+  }
+
+  Widget featuredEvents(Event _model) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => EventDetailsPage(model: _model));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: containerColor),
+            height: 250,
+            width: 300,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            _model.cover!?? "",
+                          ),
+                          fit: BoxFit.cover)),
+                  height: 150,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    _model.date!,
+                    style: GoogleFonts.openSans(
+                        color: logoColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
-                    children: <Widget>[
-                      featuredEvents(),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      featuredEvents(),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      featuredEvents(),
-                      const SizedBox(
-                        width: 10,
-                      ),
+                    children: [
+                      Expanded(
+                          child: Text(
+                        _model.name!,
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700),
+                      )),
+                      BtnElevated(
+                        btnWidth: 110,
+                        btnHeight: 40,
+                        onPressed: () {},
+                        child: Text(
+                          'INTERESTED',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12),
+                        ),
+                      )
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Upcoming Events',
-                style: GoogleFonts.openSans(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              upcomingEvents(),
-              const SizedBox(
-                height: 10,
-              ),
-              upcomingEvents(),
-              const SizedBox(
-                height: 10,
-              ),
-              upcomingEvents(),
-              const SizedBox(
-                height: 10,
-              ),
-              upcomingEvents(),
-              const SizedBox(
-                height: 10,
-              )
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    _model.location!,
+                    style: GoogleFonts.openSans(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700),
+                  ),
+                )
               ],
-            ),
-          ),
-        ));
-  }
-
-    Widget featuredEvents() {
-    return GestureDetector(
-      onTap: () {
-        Get.to(() => const EventDetailsPage());
-      },
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: containerColor),
-          height: 250,
-          width: 300,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        image: AssetImage(
-                          'assets/images/registered_event.png',
-                        ),
-                        fit: BoxFit.cover)),
-                height: 150,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  '27 MAY, 2023',
-                  style: GoogleFonts.openSans(
-                      color: logoColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Text(
-                      'Urge Talk Conference',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    )),
-                    BtnElevated(
-                      btnWidth: 110,
-                      btnHeight: 40,
-                      onPressed: () {},
-                      child: Text(
-                        'INTERESTED',
-                        style: GoogleFonts.openSans(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'VIRTUAL',
-                  style: GoogleFonts.openSans(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700),
-                ),
-              )
-            ],
-          )),
+            )),
+      ),
     );
   }
 

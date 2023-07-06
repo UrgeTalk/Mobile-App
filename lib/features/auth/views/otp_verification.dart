@@ -68,6 +68,7 @@ class _OTPVerificationState extends State<OTPVerification> {
               height: 30,
             ),
             PinCodeTextField(
+              textStyle: const TextStyle(color: Colors.white),
               autovalidateMode: AutovalidateMode.disabled,
               validator: (value) {
                 if (value == '') {
@@ -130,7 +131,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                   if (_otpPinController.text.length == 4) {
                             _authController.verifyEmail(
                               widget.emailAddress,
-                              int.parse(_otpPinController.text)
+                              _otpPinController.text
                             );
                           }
                 }),

@@ -42,13 +42,37 @@ class AuthService with BaseController {
     }
   }
 
-    Future<dynamic> verifyEmail(String email, int otpCode) async {
+    Future<dynamic> verifyEmail(String email, String otpCode) async {
     try {
       return await baseClient.post(
           url,
           '/verify', {
         "email": email,
         "otp": otpCode,
+      });
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+    Future<dynamic> forgotPassword(String email) async {
+    try {
+      return await baseClient.post(url, '/forgotPassword', {
+        "email": email,
+      });
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+    Future<dynamic> resetPassword(String email, String password, String otpCode) async {
+    try {
+      return await baseClient.post(
+          url,
+          '/resetPassword', {
+            "email": email,
+            "password": password,
+            "otp": otpCode,
       });
     } catch (error) {
       return Future.error(error);

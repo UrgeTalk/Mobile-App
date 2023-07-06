@@ -10,6 +10,7 @@ import 'package:urge/common/widgets/custom_textfield.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/auth/views/forgot_password.dart';
 import 'package:urge/features/auth/views/register.dart';
+import 'package:urge/common/helpers/dialog_box.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
