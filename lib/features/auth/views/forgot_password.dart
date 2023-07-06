@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/custom_textfield.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/features/auth/controller/auth_controller.dart';
 
 import 'otp_verification.dart';
 
@@ -18,6 +19,7 @@ class ForgotPassword extends StatefulWidget {
 class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final AuthController _authController = Get.put(AuthController());
 
   bool validateEmail(String email) {
     final valid_email = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -83,17 +85,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             const SizedBox(
               height: 60,
             ),
-            BtnElevated(
-                child: Text(
-                  'NEXT',
-                  style: GoogleFonts.openSans(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                onPressed: () {
-                 // Get.to(() => const OTPVerification());
-                }),
+            Obx(
+              () => BtnElevated(
+                  isLoading: _authController.isLoading.value,
+                  child: Text(
+                    'NEXT',
+                    style: GoogleFonts.openSans(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _authController.forgotPassword(
+                          email: _emailController.text.trim());
+                    }
+                  }),
+            ),
           ]),
         ),
       ),

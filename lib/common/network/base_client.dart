@@ -13,36 +13,40 @@ import 'package:urge/common/network/dialog_help.dart';
 import 'package:urge/common/helpers/simple_log_printer.dart';
 import 'package:urge/common/network/base_client.dart';
 
-
 const String _authUrl = "http://16.171.33.78";
 String get url => _authUrl;
 
 class BaseClient {
-
-    static const int TIME_OUT_DURATION = 180;
+  static const int TIME_OUT_DURATION = 180;
   final introdata = GetStorage();
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
-    };
+  };
+
+    Map<String, String> header = {
+    "Authorization": "Bearer Token",
+  };
+
+
 
   Map<String, String> authorization = {
     "Authorization": "Bearer Token",
   };
 
-
   //POST
-  Future<dynamic> post(String baseUrl, String api, dynamic payloadObj, {String? access,List<File>? files}) async {
-    var token = introdata.read('token');
+  Future<dynamic> post(String baseUrl, String api, dynamic payloadObj,
+      {String? access, List<File>? files}) async {
+    var token = introdata.read('access');
     var uri = Uri.parse(baseUrl + api);
     var payload = json.encode(payloadObj);
 
     if (token != null) {
       headers = {
         "Content-Type": "application/json",
-        'authorization': token,
+        'authorization': token
       };
-      }
+    }
     try {
       if (kDebugMode) {
         getLogger().d(''' URL:: $uri,
@@ -50,7 +54,7 @@ class BaseClient {
          body:: ${json.encode(payloadObj)}''');
       }
       Response response;
-      if(files != null){
+      if (files != null) {
         var request = http.MultipartRequest("POST", uri);
         request.fields.addAll(payloadObj);
         request.headers.addAll(headers);
@@ -63,9 +67,13 @@ class BaseClient {
             contentType: MediaType.parse(contentType!),
           ));
         }
-        response = await request.send().then((value) => http.Response.fromStream(value));
-      }else{
-        response = await http.post(uri, body: payload, headers: headers).timeout(const Duration(seconds: TIME_OUT_DURATION));
+        response = await request
+            .send()
+            .then((value) => http.Response.fromStream(value));
+      } else {
+        response = await http
+            .post(uri, body: payload, headers: headers)
+            .timeout(const Duration(seconds: TIME_OUT_DURATION));
       }
 
       if (kDebugMode) {
@@ -80,24 +88,57 @@ class BaseClient {
       throw ApiNotRespondingException(
           'API not responded in time', uri.toString());
     }
-
-    
   }
 
+  //GET
+  Future<dynamic> get(String baseUrl, String api, {bool use2 = false}) async {
+    var token = introdata.read('access');
+    var uri = Uri.parse(baseUrl + api);
 
-    dynamic _processResponse(http.Response response) {
+    if (token != null) {
+      header = {
+        'Authorization':
+            "Bearer $token"
+      };
+    }
+    try {
+      if (kDebugMode) {
+        getLogger().d(''' URL:: $uri,
+         header:: ${json.encode(header)}''');
+      }
+
+      var response = await http
+          .get(uri, headers: header)
+          .timeout(const Duration(seconds: TIME_OUT_DURATION));
+
+      if (kDebugMode) {
+        getLogger().d(
+            'Received Response status code is :${response.statusCode} and response body is  ${response.body} ');
+      }
+
+      return _processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException(
+          'API not responded in time', uri.toString());
+    }
+  }
+
+  dynamic _processResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
         return responseJson;
-    //break;
+      //break;
       case 201:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
         return responseJson;
-    // break;
+      // break;
       case 400:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
-        throw BadRequestException(responseJson['message'] ?? 'An error occurred',
+        throw BadRequestException(
+            responseJson['message'] ?? 'An error occurred',
             response.request!.url.toString());
       case 401:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
@@ -113,7 +154,8 @@ class BaseClient {
             response.request!.url.toString());
       case 422:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
-        throw BadRequestException(responseJson['message'] ?? 'An error occurred',
+        throw BadRequestException(
+            responseJson['message'] ?? 'An error occurred',
             response.request!.url.toString());
       case 503:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
@@ -126,11 +168,4 @@ class BaseClient {
             response.request!.url.toString());
     }
   }
-
-
-
-
-
 }
-
-

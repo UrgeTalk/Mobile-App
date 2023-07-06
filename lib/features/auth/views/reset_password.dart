@@ -5,10 +5,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/custom_button.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/common/widgets/custom_textfield.dart';
+import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/auth/views/login.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+  const ResetPassword(
+      {super.key, required this.emailAddress, required this.otpCode});
+
+  final String emailAddress;
+  final String otpCode;
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();
@@ -21,6 +26,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   bool obscurePassword = false;
   final _formKey = GlobalKey<FormState>();
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -106,17 +112,26 @@ class _ResetPasswordState extends State<ResetPassword> {
             const SizedBox(
               height: 60,
             ),
-            BtnElevated(
-                child: Text(
-                  'RESET PASSWORD',
-                  style: GoogleFonts.openSans(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-                onPressed: () {
-                  Get.to(() => const Login());
-                }),
+            Obx(
+              () => BtnElevated(
+                  isLoading: _authController.isLoading.value,
+                  child: Text(
+                    'RESET PASSWORD',
+                    style: GoogleFonts.openSans(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _authController.resetPassword(
+                        widget.emailAddress,
+                        _passwordController.text,
+                        widget.otpCode,
+                      );
+                    }
+                  }),
+            ),
           ]),
         ),
       ),
