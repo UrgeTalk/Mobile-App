@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:urge/features/home/controller/home_controller.dart';
+import 'package:urge/features/home/model/home_model.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,56 +13,60 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final HomeController _homeController = Get.put(HomeController());
+  late final List<HomeModel> featuredVideos;
+  late final List<HomeModel> recommendedVideos;
+  late final List<HomeModel> trendingVideos;
+
+  @override
+  void initState() {
+    _homeController.getAllVideos();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appBackgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: SafeArea(
-          child: ListView(
+        appBar: AppBar(
+          backgroundColor: appBackgroundColor,
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Hello, Charles!!!',
+                  style: GoogleFonts.openSans(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white)),
+              GestureDetector(
+                onTap: () {
+                  // Get.to(() => const Profile());
+                },
+                child: const CircleAvatar(
+                    radius: 20,
+                    backgroundImage:
+                        AssetImage('assets/images/profile_pic.png')),
+              )
+            ],
+          ),
+        ),
+        backgroundColor: appBackgroundColor,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 30,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text('Hello, Charles!!!',
-                          style: GoogleFonts.openSans(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.white)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/heart_icon.png',
-                        height: 20,
-                        width: 20,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const CircleAvatar(
-                          radius: 20,
-                          backgroundImage:
-                              AssetImage('assets/images/profile_pic.png')),
-                    ],
-                  )
-                ],
+              Text(
+                'View our latest videos on Urge Talk',
+                style: GoogleFonts.openSans(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white),
+                textAlign: TextAlign.start,
               ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text('View our latest videos on Urge Talk',
-                  style: GoogleFonts.openSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white)),
               const SizedBox(
                 height: 20,
               ),
@@ -71,40 +78,22 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 5,
               ),
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        image: AssetImage('assets/images/dummy_image.png'))),
-                width: double.infinity,
-                height: 180,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text('Making effective impact in your Business',
-                  style: GoogleFonts.openSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Mike Trapp',
-                      style: GoogleFonts.openSans(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white)),
-                  Image.asset(
-                    'assets/images/heart_icon.png',
-                    height: 20,
-                    width: 20,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              Expanded(child: Obx(() {
+                if (_homeController.isListLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (_homeController.videoList.isEmpty) {
+                  return const Center(child: Text('No video'));
+                } else {
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _homeController.videoList.length,
+                      itemBuilder: ((context, index) {
+                        HomeModel video = _homeController.videoList[index];
+                        //final video = featuredVideos[index];
+                        return featured(video);
+                      }));
+                }
+              })),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -125,33 +114,7 @@ class _HomeState extends State<Home> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: <Widget>[
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      recommended()
-                    ],
+                    children: <Widget>[],
                   ),
                 ),
               ),
@@ -178,40 +141,13 @@ class _HomeState extends State<Home> {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: <Widget>[
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      trending(),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
+                    children: <Widget>[],
                   ),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget recommended() {
@@ -249,6 +185,46 @@ class _HomeState extends State<Home> {
           ],
         ),
       ]),
+    );
+  }
+
+  Widget featured(HomeModel video) {
+    return SizedBox(
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                    image: AssetImage('assets/images/dummy_image.png'))),
+            width: double.infinity,
+            height: 180,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(video.title!,
+              style: GoogleFonts.openSans(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Mike Trapp',
+                  style: GoogleFonts.openSans(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white)),
+              Image.asset(
+                'assets/images/heart_icon.png',
+                height: 20,
+                width: 20,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

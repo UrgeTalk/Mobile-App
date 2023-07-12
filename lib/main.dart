@@ -4,13 +4,12 @@ import 'package:device_preview/device_preview.dart';
 import 'features/splash/splash.dart';
 
 Future<void> main() async {
- // DevicePreview(builder: (context) => const MyApp());
+  //DevicePreview(builder: (context) => const MyApp());
   runApp(const MyApp());
 }
 // void main() => runApp(
-//   DevicePreview(builder: (context) =>const  MyApp()),
-// );
-
+//       DevicePreview(builder: (context) => const MyApp()),
+//     );
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
