@@ -3,19 +3,13 @@ import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
-import 'package:urge/features/dashboard/views/ticket.dart';
 import 'package:urge/features/events/model/event_model.dart';
 
-class EventDetails extends StatefulWidget {
-  const EventDetails({super.key, required this.model});
+class EventDetailsPage extends StatelessWidget {
+  const EventDetailsPage({super.key, required this.model});
 
   final Event model;
 
-  @override
-  State<EventDetails> createState() => _EventDetailsState();
-}
-
-class _EventDetailsState extends State<EventDetails> {
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
       return text;
@@ -27,7 +21,7 @@ class _EventDetailsState extends State<EventDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registered Events',
+        title: Text('Events Details',
             style: GoogleFonts.openSans(
                 color: Colors.white,
                 fontSize: 20,
@@ -58,14 +52,14 @@ class _EventDetailsState extends State<EventDetails> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                            image: NetworkImage(widget.model.cover!),
+                            image: NetworkImage(model.cover!),
                             fit: BoxFit.cover)),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    capitalizeFirstLetter(widget.model.type!),
+                    capitalizeFirstLetter(model.type!),
                     style: GoogleFonts.openSans(
                         color: yellowColor,
                         fontSize: 12,
@@ -75,7 +69,7 @@ class _EventDetailsState extends State<EventDetails> {
                     children: [
                       Expanded(
                           child: Text(
-                        widget.model.name!,
+                        model.name!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -85,10 +79,10 @@ class _EventDetailsState extends State<EventDetails> {
                         btnWidth: 110,
                         btnHeight: 40,
                         onPressed: () {
-                           Get.to(() => Ticket(model: widget.model));
+                          // Get.to(() => const Ticket());
                         },
                         child: Text(
-                          'VIEW TICKET',
+                          'REGISTER',
                           style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -108,7 +102,7 @@ class _EventDetailsState extends State<EventDetails> {
                         width: 0,
                       ),
                       Text(
-                        widget.model.date!,
+                        model.date!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -125,7 +119,7 @@ class _EventDetailsState extends State<EventDetails> {
                         width: 0,
                       ),
                       Text(
-                        widget.model.time!,
+                        model.time!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -146,7 +140,7 @@ class _EventDetailsState extends State<EventDetails> {
                             width: 0,
                           ),
                           Text(
-                            widget.model.location!,
+                            model.location!,
                             style: GoogleFonts.openSans(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -210,7 +204,7 @@ class _EventDetailsState extends State<EventDetails> {
                     height: 5,
                   ),
                   Text(
-                    widget.model.description!,
+                    model.description!,
                     style: GoogleFonts.openSans(
                         color: Colors.white,
                         fontSize: 14,
@@ -232,8 +226,9 @@ class _EventDetailsState extends State<EventDetails> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: List<Widget>.from(widget.model.tags!
-                        .map((tag) => Chip(label: Text(tag.name)))),
+                    children: List<Widget>.from(
+                model.tags!.map(
+                  (tag) => Chip(label: Text(tag.name)))),
                   ),
                   const SizedBox(
                     height: 10,

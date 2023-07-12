@@ -3,14 +3,25 @@ import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 
+import '../../events/model/event_model.dart';
+
 class Ticket extends StatefulWidget {
-  const Ticket({super.key});
+  Ticket({super.key, required this.model});
+
+  final Event model;
 
   @override
   State<Ticket> createState() => _TicketState();
 }
 
 class _TicketState extends State<Ticket> {
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,15 +87,17 @@ class _TicketState extends State<Ticket> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Urge Talk Conference',
-                                style: GoogleFonts.openSans(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
+                              Expanded(
+                                child: Text(
+                                  widget.model.name!,
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
                               Text(
-                                'FREE',
+                                capitalizeFirstLetter(widget.model.type!),
                                 style: GoogleFonts.openSans(
                                     color: logoColor,
                                     fontSize: 12,
@@ -116,7 +129,7 @@ class _TicketState extends State<Ticket> {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   Text(
-                                    'SAT, 27 MAY, 2023',
+                                    widget.model.date!,
                                     style: GoogleFonts.openSans(
                                         color: Colors.white,
                                         fontSize: 14,
@@ -136,7 +149,7 @@ class _TicketState extends State<Ticket> {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   Text(
-                                    'SAT, 27 MAY, 2023',
+                                    widget.model.time!,
                                     style: GoogleFonts.openSans(
                                         color: Colors.white,
                                         fontSize: 14,
@@ -163,7 +176,7 @@ class _TicketState extends State<Ticket> {
                                 height: 5,
                               ),
                               Text(
-                                'General Town Hall,\nLorem ipsum dolor sit amet consectetur. Aliquet nec placerat consequat',
+                                widget.model.location!,
                                 style: GoogleFonts.openSans(
                                     color: Colors.white,
                                     fontSize: 14,
@@ -229,24 +242,27 @@ class _TicketState extends State<Ticket> {
                 height: 20,
               ),
               BtnElevated(
-                btnWidth: double.infinity,
+                  btnWidth: double.infinity,
                   child: Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('assets/images/download.png',
-                        height: 15,
-                        width: 15,),
+                        Image.asset(
+                          'assets/images/download.png',
+                          height: 15,
+                          width: 15,
+                        ),
                         const SizedBox(
                           width: 10,
                         ),
-                        Text('DOWNLOAD',
-                        style: GoogleFonts.openSans(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700
-                        ),)
-                        ],
+                        Text(
+                          'DOWNLOAD',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                        )
+                      ],
                     ),
                   ),
                   onPressed: () {})

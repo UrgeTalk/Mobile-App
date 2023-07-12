@@ -13,7 +13,7 @@ import 'package:urge/common/network/dialog_help.dart';
 import 'package:urge/common/helpers/simple_log_printer.dart';
 import 'package:urge/common/network/base_client.dart';
 
-const String _authUrl = "http://16.171.33.78";
+const String _authUrl = "https://api.urgetalks.com";
 String get url => _authUrl;
 
 class BaseClient {
@@ -22,6 +22,7 @@ class BaseClient {
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
+     "Accept": "*/*"
   };
 
     Map<String, String> header = {

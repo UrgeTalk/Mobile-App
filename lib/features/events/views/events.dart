@@ -6,6 +6,7 @@ import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
 import 'package:urge/features/events/views/event_details.dart';
+import 'package:urge/features/profile/views/profile.dart';
 
 class Events extends StatefulWidget {
   const Events({super.key});
@@ -38,9 +39,15 @@ class _EventsState extends State<Events> {
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
                       color: Colors.white)),
-              const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage('assets/images/profile_pic.png'))
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => const Profile());
+                },
+                child: const CircleAvatar(
+                    radius: 20,
+                    backgroundImage:
+                        AssetImage('assets/images/profile_pic.png')),
+              )
             ],
           ),
         ),
@@ -85,39 +92,6 @@ class _EventsState extends State<Events> {
                     }
                   }),
                 ),
-                // Obx(() {
-                //   if (_controller.isListLoading.value) {
-                //     return const Center(child: CircularProgressIndicator());
-                //   } else if (_controller.errorMessage.isNotEmpty) {
-                //     return const Center(child: Text('An Error Occured'));
-                //   } else if (_controller.newEventList.isEmpty) {
-                //     return const Center(child: Text('No Event Found'));
-                //   } else {
-                //     return SingleChildScrollView(
-                //       scrollDirection: Axis.horizontal,
-                //       child: ListView.builder(
-                //           itemCount: _controller.newEventList.length,
-                //           itemBuilder: ((context, index) {
-                //             Event _model = _controller.newEventList[index];
-                //             return featuredEvents(_model);
-                //           })),
-                //     );
-                //   }
-                // }),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 0),
-                //   child: SingleChildScrollView(
-                //     scrollDirection: Axis.horizontal,
-                //     child: Row(
-                //       children: <Widget>[
-                //         featuredEvents(),
-                //         const SizedBox(
-                //           width: 10,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
                 const SizedBox(height: 10),
                 Text(
                   'Upcoming Events',
@@ -131,7 +105,7 @@ class _EventsState extends State<Events> {
                 ),
                 Expanded(
                   child: Obx(() {
-                    if (_controller.isListLoading.value) {
+                    if (_controller.isLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (_controller.errorMessage.isNotEmpty) {
                       return const Center(child: Text('An Error Occured'));
@@ -148,23 +122,6 @@ class _EventsState extends State<Events> {
                     }
                   }),
                 ),
-
-                // upcomingEvents(),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // upcomingEvents(),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // upcomingEvents(),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // upcomingEvents(),
-                // const SizedBox(
-                //   height: 10,
-                // )
               ],
             )));
   }
@@ -189,7 +146,7 @@ class _EventsState extends State<Events> {
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                           image: NetworkImage(
-                            _model.cover!?? "",
+                            _model.cover! ?? "",
                           ),
                           fit: BoxFit.cover)),
                   height: 150,

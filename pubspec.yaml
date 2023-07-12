@@ -48,6 +48,7 @@ dependencies:
   blurry_modal_progress_hud: ^1.1.0
   device_preview: ^1.1.0
   cached_network_image: ^3.2.3
+  better_player: ^0.0.63
 
 dev_dependencies:
   flutter_test:
