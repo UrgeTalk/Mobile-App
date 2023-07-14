@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/features/dashboard/controller/dashboard_controller.dart';
 import 'package:urge/features/dashboard/model/master_class_model.dart';
 import 'package:urge/common/helpers/date_util.dart';
+import 'package:urge/features/home/views/home_details.dart';
 
 class MasterClass extends StatefulWidget {
   const MasterClass({super.key});
@@ -47,40 +48,41 @@ class _MasterClassState extends State<MasterClass> {
       ),
       backgroundColor: appBackgroundColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Column(
-          children: [
-             const SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: Obx(() {
-                if (_dashboardController.isListLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (_dashboardController.errorMessage.isNotEmpty) {
-                  return const Center(child: Text('An Error Occurred'));
-                } else {
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      itemCount: _dashboardController.newMasterClassList.length,
-                      itemBuilder: ((context, index) {
-                        MasterClassModel _model =
-                            _dashboardController.newMasterClassList[index];
-                            return classList(_model);
-                            
-                      }));
-                }
-              }),
-            ),
-          ],
-        )
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: Obx(() {
+                  if (_dashboardController.isListLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (_dashboardController.errorMessage.isNotEmpty) {
+                    return const Center(child: Text('An Error Occurred'));
+                  } else {
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount:
+                            _dashboardController.newMasterClassList.length,
+                        itemBuilder: ((context, index) {
+                          MasterClassModel _model =
+                              _dashboardController.newMasterClassList[index];
+                          return classList(_model);
+                        }));
+                  }
+                }),
+              ),
+            ],
+          )),
     );
   }
 
   Widget classList(MasterClassModel _model) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+       // Get.to(() => HomeDetails(model: _model));
+      },
       child: SizedBox(
         child: Column(
           children: [
@@ -91,10 +93,9 @@ class _MasterClassState extends State<MasterClass> {
                   width: 150,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      image:  DecorationImage(
+                      image: DecorationImage(
                           image: NetworkImage(_model.coverImage! ?? ""),
-                          fit: BoxFit.cover)
-                          ),
+                          fit: BoxFit.cover)),
                 ),
                 const SizedBox(
                   width: 10,
@@ -107,7 +108,7 @@ class _MasterClassState extends State<MasterClass> {
                       height: 5,
                     ),
                     Text(
-                      _model.title!??"",
+                      _model.title! ?? "",
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 14,
@@ -117,7 +118,7 @@ class _MasterClassState extends State<MasterClass> {
                       height: 10,
                     ),
                     Text(
-                      _model.speaker!.fullName?? "",
+                      _model.speaker!.fullName ?? "",
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 12,
@@ -128,8 +129,8 @@ class _MasterClassState extends State<MasterClass> {
                     ),
                     Text(
                       getStrDate(DateTime.parse(_model.date!),
-                      pattern: "yyyy-MM-dd") ??
-                  '',
+                              pattern: "yyyy-MM-dd") ??
+                          '',
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 10,

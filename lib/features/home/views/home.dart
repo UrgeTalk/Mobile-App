@@ -4,6 +4,7 @@ import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import 'package:urge/features/home/model/home_model.dart';
+import 'package:urge/features/home/views/home_details.dart';
 import 'package:urge/features/home/views/latest_videos.dart';
 import 'package:urge/features/home/views/recommended_videos.dart';
 import 'package:urge/features/home/views/trending_videos.dart';
@@ -45,7 +46,7 @@ class _HomeState extends State<Home> {
                       color: Colors.white)),
               GestureDetector(
                 onTap: () {
-                   Get.to(() => const Profile());
+                  Get.to(() => const Profile());
                 },
                 child: const CircleAvatar(
                     radius: 20,
@@ -171,178 +172,140 @@ class _HomeState extends State<Home> {
 
   Widget buildFeaturedVideos() {
     return SizedBox(
-      height: 250,
-      child: Obx(() {
-      if (_homeController.isListLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      } else if (_homeController.featuredVideos.isEmpty) {
-        return const Center(child: Text('No video'));
-      } else {
-        return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _homeController.featuredVideos.length,
-            itemBuilder: ((context, index) {
-              HomeModel video = _homeController.featuredVideos[index];
-              return featured(video);
-            }));
-      }
-    }));
+        height: 250,
+        child: Obx(() {
+          if (_homeController.isListLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (_homeController.featuredVideos.isEmpty) {
+            return const Center(child: Text('No video'));
+          } else {
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _homeController.featuredVideos.length,
+                itemBuilder: ((context, index) {
+                  HomeModel video = _homeController.featuredVideos[index];
+                  return featured(video);
+                }));
+          }
+        }));
   }
 
   Widget buildRecommendedVideos() {
     return SizedBox(
-      height: 280,
-      child: Obx(() {
-      if (_homeController.isListLoading.value) {
-        return const Center(child: Center());
-      } else if (_homeController.recommendedVideos.isEmpty) {
-        return const Center(child: Text('No videos'));
-      } else {
-        return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _homeController.recommendedVideos.length,
-            itemBuilder: ((context, index) {
-              HomeModel video = _homeController.recommendedVideos[index];
-              return recommended(video);
-            }));
-      }
-    }));
+        height: 280,
+        child: Obx(() {
+          if (_homeController.isListLoading.value) {
+            return const Center(child: Center());
+          } else if (_homeController.recommendedVideos.isEmpty) {
+            return const Center(child: Text('No videos'));
+          } else {
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _homeController.recommendedVideos.length,
+                itemBuilder: ((context, index) {
+                  HomeModel video = _homeController.recommendedVideos[index];
+                  return recommended(video);
+                }));
+          }
+        }));
   }
 
   Widget buildLatestVideos() {
     return SizedBox(
-      height: 260,
-      child: Obx(() {
-      if (_homeController.isListLoading.value) {
-        return const Center(child: Center());
-      } else if (_homeController.lastestVideos.isEmpty) {
-        return const Center(child: Text('No videos'));
-      } else {
-        return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _homeController.lastestVideos.length,
-            itemBuilder: ((context, index) {
-              HomeModel video = _homeController.lastestVideos[index];
-              return latest(video);
-            }));
-      }
-    }));
+        height: 260,
+        child: Obx(() {
+          if (_homeController.isListLoading.value) {
+            return const Center(child: Center());
+          } else if (_homeController.lastestVideos.isEmpty) {
+            return const Center(child: Text('No videos'));
+          } else {
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _homeController.lastestVideos.length,
+                itemBuilder: ((context, index) {
+                  HomeModel video = _homeController.lastestVideos[index];
+                  return latest(video);
+                }));
+          }
+        }));
   }
 
   Widget buildTrendingVideos() {
     return SizedBox(
-      height: 250,
-      child: Obx(() {
-      if (_homeController.isListLoading.value) {
-        return const Center(child: Center());
-      } else if (_homeController.trendingVideos.isEmpty) {
-        return const Center(child: Text('No videos'));
-      } else {
-        return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: _homeController.trendingVideos.length,
-            itemBuilder: ((context, index) {
-              HomeModel video = _homeController.trendingVideos[index];
-              return trending(video);
-            }));
-      }
-    }));
+        height: 250,
+        child: Obx(() {
+          if (_homeController.isListLoading.value) {
+            return const Center(child: Center());
+          } else if (_homeController.trendingVideos.isEmpty) {
+            return const Center(child: Text('No videos'));
+          } else {
+            return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _homeController.trendingVideos.length,
+                itemBuilder: ((context, index) {
+                  HomeModel video = _homeController.trendingVideos[index];
+                  return trending(video);
+                }));
+          }
+        }));
   }
 
   Widget recommended(HomeModel video) {
-    return SizedBox(
-      width: 300,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-          
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(video.coverImage! ?? ""),
-                    fit: BoxFit.cover)),
-                    width: 300,
-            height: 180,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(video.title! ?? "",
-              style: GoogleFonts.openSans(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(video.speaker!.fullName ?? "",
-                  style: GoogleFonts.openSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white)),
-              Image.asset(
-                'assets/images/heart_icon.png',
-                height: 20,
-                width: 20,
-              ),
-            ],
-          ),
-        ]),
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeDetails(model: video));
+      },
+      child: SizedBox(
+        width: 300,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                      image: NetworkImage(video.coverImage! ?? ""),
+                      fit: BoxFit.cover)),
+              width: 300,
+              height: 180,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(video.title! ?? "",
+                style: GoogleFonts.openSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(video.speaker!.fullName ?? "",
+                    style: GoogleFonts.openSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white)),
+                Image.asset(
+                  'assets/images/heart_icon.png',
+                  height: 20,
+                  width: 20,
+                ),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }
 
   Widget featured(HomeModel video) {
-    return SizedBox(
-      width: 300,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(video.coverImage! ?? ""),
-                    fit: BoxFit.cover)),
-            width: 300,
-            height: 180,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(video.title! ?? "",
-              style: GoogleFonts.openSans(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(video.speaker!.fullName ?? "",
-                  style: GoogleFonts.openSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white)),
-              Image.asset(
-                'assets/images/heart_icon.png',
-                height: 20,
-                width: 20,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-    Widget trending(HomeModel video) {
-    return SizedBox(
-      width: 300,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeDetails(model: video));
+      },
+      child: SizedBox(
+        width: 300,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -384,47 +347,102 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget latest(HomeModel video) {
-    return SizedBox(
-      width: 300,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-          Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(video.coverImage! ?? ""),
-                    fit: BoxFit.cover)),
-            height: 180,
-            width: 300,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(video.title!,
-              style: GoogleFonts.openSans(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget trending(HomeModel video) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeDetails(model: video));
+      },
+      child: SizedBox(
+        width: 300,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(video.speaker!.fullName ?? "",
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image: NetworkImage(video.coverImage! ?? ""),
+                        fit: BoxFit.cover)),
+                width: 300,
+                height: 180,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(video.title! ?? "",
                   style: GoogleFonts.openSans(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
                       color: Colors.white)),
-              Image.asset(
-                'assets/images/heart_icon.png',
-                height: 20,
-                width: 20,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(video.speaker!.fullName ?? "",
+                      style: GoogleFonts.openSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white)),
+                  Image.asset(
+                    'assets/images/heart_icon.png',
+                    height: 20,
+                    width: 20,
+                  ),
+                ],
               ),
             ],
           ),
-        ]),
+        ),
+      ),
+    );
+  }
+
+  Widget latest(HomeModel video) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => HomeDetails(model: video));
+      },
+      child: SizedBox(
+        width: 300,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                      image: NetworkImage(video.coverImage! ?? ""),
+                      fit: BoxFit.cover)),
+              height: 180,
+              width: 300,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(video.title!,
+                style: GoogleFonts.openSans(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(video.speaker!.fullName ?? "",
+                    style: GoogleFonts.openSans(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white)),
+                Image.asset(
+                  'assets/images/heart_icon.png',
+                  height: 20,
+                  width: 20,
+                ),
+              ],
+            ),
+          ]),
+        ),
       ),
     );
   }

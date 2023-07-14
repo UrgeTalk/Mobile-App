@@ -49,6 +49,8 @@ dependencies:
   device_preview: ^1.1.0
   cached_network_image: ^3.2.3
   better_player: ^0.0.63
+  chewie: ^1.5.0
+  video_player: ^2.7.0
 
 dev_dependencies:
   flutter_test:
