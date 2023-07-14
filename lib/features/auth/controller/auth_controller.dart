@@ -95,4 +95,5 @@ class AuthController extends GetxController with BaseController {
       handleError(e);
     });
   }
+
 }

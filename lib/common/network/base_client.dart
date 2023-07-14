@@ -45,7 +45,7 @@ class BaseClient {
     if (token != null) {
       headers = {
         "Content-Type": "application/json",
-        'authorization': token
+        'authorization': "Bearer $token"
       };
     }
     try {

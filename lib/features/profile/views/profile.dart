@@ -9,6 +9,7 @@ import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/profile/controller/profile_controller.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:urge/features/profile/model/profile_model.dart';
+import 'package:urge/features/profile/views/change_password.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -17,11 +18,13 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _profileController = Get.put(ProfileController());
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
+  late TabController _tabController;
+  int _currentIndex = 0;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -32,169 +35,331 @@ class _ProfileState extends State<Profile> {
     _lastNameController.text = _profileController.profileModel.lastName ?? '';
   }
 
-    @override
-  initState() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _profileController.getProfile();
-      _refreshIndicatorKey.currentState?.show();
+  void _onTabChange() {
+    setState(() {
+      _currentIndex = _tabController.index;
     });
-    super.initState();
+  }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _profileController.getProfile();
+      getDetails();
+    });
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(_onTabChange);
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appBackgroundColor,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Row(
-          children: [
-            Text('Profile',
-                style: GoogleFonts.openSans(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700))
-          ],
-        ),
-        actions: [
-          BtnElevated(
-            btnWidth: 110,
-            btnHeight: 30,
-            onPressed: () {
-              editProfileDialog();
-            },
-            child: Text(
-              'Edit Profile',
-              style: GoogleFonts.openSans(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12),
-            ),
-          )
-        ],
-      ),
-      backgroundColor: appBackgroundColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 20,
+    return GetBuilder<ProfileController>(
+        id: 'Profile',
+        builder: (profileController) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: appBackgroundColor,
+              elevation: 0,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                color: Colors.white,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              Align(
-                alignment: Alignment.center,
-                child: CachedNetworkImage(
-                  imageUrl: _profileController.profileModel.profilePicture ==
-                              null ||
-                          _profileController.profileModel.profilePicture == ''
-                      ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
-                      : _profileController.profileModel.profilePicture!,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.person,
-                    size: 120,
-                  ),
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: 120,
-                    height: 120,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Profile',
+                      style: GoogleFonts.openSans(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700)),
+                  SizedBox(
+                    height: 40,
+                    child: BtnElevated(
+                      btnWidth: 100,
+                      btnHeight: 20,
+                      onPressed: () {
+                        editProfileDialog();
+                      },
+                      child: Text(
+                        'Edit Profile',
+                        style: GoogleFonts.openSans(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12),
+                      ),
                     ),
-                  ),
+                  )
+                ],
+              ),
+            ),
+            backgroundColor: appBackgroundColor,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: CachedNetworkImage(
+                        imageUrl: _profileController
+                                        .profileModel.profilePicture ==
+                                    null ||
+                                _profileController
+                                        .profileModel.profilePicture ==
+                                    ''
+                            ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                            : _profileController.profileModel.profilePicture!,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.person,
+                          size: 120,
+                        ),
+                        imageBuilder: (context, imageProvider) => Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                            image: DecorationImage(
+                                image: imageProvider, fit: BoxFit.cover),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        _profileController.profileModel.fullName! ?? "",
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'My Subscription',
+                          style: GoogleFonts.openSans(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            subscriptionDialog();
+                          },
+                          icon: const Icon(Icons.arrow_forward),
+                          color: Colors.white,
+                          iconSize: 25,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Account Settings',
+                          style: GoogleFonts.openSans(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Get.to(() => const ChangePassword());
+                          },
+                          icon: const Icon(Icons.arrow_forward),
+                          color: Colors.white,
+                          iconSize: 25,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Logout',
+                          style: GoogleFonts.openSans(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            logoutDialog();
+                          },
+                          icon: const Icon(Icons.arrow_forward),
+                          color: Colors.white,
+                          iconSize: 25,
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                _profileController.profileModel.fullName,
+            ),
+          );
+        });
+  }
+
+  logoutDialog() {
+    return Get.dialog(AlertDialog(
+      backgroundColor: containerColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      content: Builder(
+        builder: (context) {
+          var height = MediaQuery.of(context).size.height;
+          var width = MediaQuery.of(context).size.width;
+          return SizedBox(
+            height: height * 0.15,
+            width: width * 0.8,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Logout',
+                    style: GoogleFonts.openSans(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text('Are you sure you want to Logout?',
+                    style: GoogleFonts.openSans(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700)),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: BtnElevated(
+                          btnHeight: 40,
+                          child: Text(
+                            'CANCEL',
+                            style: GoogleFonts.openSans(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          _profileController.logOut();
+                        },
+                        child: Container(
+                          height: 40,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: containerColor,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: logoColor, width: 1),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'LOGOUT',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+        },
+      ),
+    ));
+  }
+
+  subscriptionDialog() {
+
+    return Get.dialog(AlertDialog(
+      backgroundColor: containerColor,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0))),
+      content: Builder(builder: (context) {
+        var height = MediaQuery.of(context).size.height;
+        var width = MediaQuery.of(context).size.width;
+        return SizedBox(
+          height: height * 0.5,
+          width: width * 0.9,
+          child: Column(children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Text('BECOME AN',
                 style: GoogleFonts.openSans(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'My Subscription',
-                    style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward),
-                    color: Colors.white,
-                    iconSize: 25,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Account Settings',
-                    style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward),
-                    color: Colors.white,
-                    iconSize: 25,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Logout',
-                    style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.arrow_forward),
-                    color: Colors.white,
-                    iconSize: 25,
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700)),
+            const SizedBox(
+              height: 5,
+            ),
+            Text('INSIDER',
+                style: GoogleFonts.openSans(
+                    color: logoColor,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700)),
+            const SizedBox(
+              height: 10,
+            ),
+            // _buildTabBar(),
+            // Expanded(
+            //     child: TabBarView(
+            //   controller: _tabController,
+            //   children: const [],
+            // ))
+          ]),
+        );
+      }),
+    ));
   }
 
   editProfileDialog() {
@@ -347,5 +512,26 @@ class _ProfileState extends State<Profile> {
         },
       ),
     ));
+  }
+
+  Widget _buildTabBar() {
+    return Material(
+      child: TabBar(
+        labelPadding: EdgeInsets.all(0),
+        labelColor: logoColor,
+        unselectedLabelColor: Colors.white,
+        controller: _tabController,
+        tabs: const [
+          SizedBox(
+            child: Tab(
+              text: 'MONTHLY',
+            ),
+          ),
+          SizedBox(
+            child: Tab(text: 'ANNUALLY'),
+          )
+        ],
+      ),
+    );
   }
 }

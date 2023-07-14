@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:urge/features/dashboard/controller/dashboard_controller.dart';
+import 'package:urge/features/dashboard/model/master_class_model.dart';
+import 'package:urge/common/helpers/date_util.dart';
 
 class MasterClass extends StatefulWidget {
   const MasterClass({super.key});
@@ -10,6 +14,17 @@ class MasterClass extends StatefulWidget {
 }
 
 class _MasterClassState extends State<MasterClass> {
+  final DashboardController _dashboardController =
+      Get.put(DashboardController());
+
+  @override
+  void initState() {
+    _dashboardController.getMasterClass();
+    _dashboardController.newMasterClassList.value =
+        _dashboardController.masterClassList;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,179 +48,99 @@ class _MasterClassState extends State<MasterClass> {
       backgroundColor: appBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: SafeArea(
-            child: ListView(
+        child: Column(
           children: [
-            const SizedBox(
+             const SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                Container(
-                  height: 100,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/registered_event.png'),
-                          fit: BoxFit.cover)),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Making Effective Impact in your business',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'David Reed',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '22 May 2023',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ))
-              ],
+            Expanded(
+              child: Obx(() {
+                if (_dashboardController.isListLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (_dashboardController.errorMessage.isNotEmpty) {
+                  return const Center(child: Text('An Error Occurred'));
+                } else {
+                  return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: _dashboardController.newMasterClassList.length,
+                      itemBuilder: ((context, index) {
+                        MasterClassModel _model =
+                            _dashboardController.newMasterClassList[index];
+                            return classList(_model);
+                            
+                      }));
+                }
+              }),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 100,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/registered_event.png'),
-                          fit: BoxFit.cover)),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Making Effective Impact in your business',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'David Reed',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '22 May 2023',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ))
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 100,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: const DecorationImage(
-                          image:
-                              AssetImage('assets/images/registered_event.png'),
-                          fit: BoxFit.cover)),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Making Effective Impact in your business',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'David Reed',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '22 May 2023',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ))
-              ],
-            )
           ],
-        )),
+        )
+      ),
+    );
+  }
+
+  Widget classList(MasterClassModel _model) {
+    return GestureDetector(
+      onTap: () {},
+      child: SizedBox(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: 150,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image:  DecorationImage(
+                          image: NetworkImage(_model.coverImage! ?? ""),
+                          fit: BoxFit.cover)
+                          ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      _model.title!??"",
+                      style: GoogleFonts.openSans(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      _model.speaker!.fullName?? "",
+                      style: GoogleFonts.openSans(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      getStrDate(DateTime.parse(_model.date!),
+                      pattern: "yyyy-MM-dd") ??
+                  '',
+                      style: GoogleFonts.openSans(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400),
+                    )
+                  ],
+                ))
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -18,6 +18,13 @@ class Events extends StatefulWidget {
 class _EventsState extends State<Events> {
   final EventController _controller = Get.put(EventController());
 
+  String capitalizeFirstLetter(String text) {
+    if (text.isEmpty) {
+      return text;
+    }
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
   @override
   void initState() {
     _controller.getAllEvents();
@@ -54,76 +61,91 @@ class _EventsState extends State<Events> {
         backgroundColor: appBackgroundColor,
         body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('See all upcoming events',
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('See all upcoming events',
+                      style: GoogleFonts.openSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text('Featured Events',
+                      style: GoogleFonts.openSans(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white)),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  buildFeaturedEvents(),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Upcoming Events',
                     style: GoogleFonts.openSans(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white)),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('Featured Events',
-                    style: GoogleFonts.openSans(
+                        color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white)),
-                const SizedBox(
-                  height: 5,
-                ),
-                Expanded(
-                  child: Obx(() {
-                    if (_controller.isListLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_controller.errorMessage.isNotEmpty) {
-                      return const Center(child: Text('An Error Occured'));
-                    } else if (_controller.newEventList.isEmpty) {
-                      return const Center(child: Text('No Event Found'));
-                    } else {
-                      return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _controller.newEventList.length,
-                          itemBuilder: ((context, index) {
-                            Event _model = _controller.newEventList[index];
-                            return featuredEvents(_model);
-                          }));
-                    }
-                  }),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Upcoming Events',
-                  style: GoogleFonts.openSans(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: Obx(() {
-                    if (_controller.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_controller.errorMessage.isNotEmpty) {
-                      return const Center(child: Text('An Error Occured'));
-                    } else if (_controller.newEventList.isEmpty) {
-                      return const Center(child: Text('No Event Found'));
-                    } else {
-                      return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: _controller.newEventList.length,
-                          itemBuilder: ((context, index) {
-                            Event _model = _controller.newEventList[index];
-                            return featuredEvents(_model);
-                          }));
-                    }
-                  }),
-                ),
-              ],
+                        fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  buildUpcomingEvents(),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             )));
+  }
+
+  Widget buildFeaturedEvents() {
+    return SizedBox(
+      height: 300,
+      child: Obx(() {
+        if (_controller.isListLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (_controller.errorMessage.isNotEmpty) {
+          return const Center(child: Text('An Error Occured'));
+        } else if (_controller.newEventList.isEmpty) {
+          return const Center(child: Text('No Event Found'));
+        } else {
+          return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _controller.newEventList.length,
+              itemBuilder: ((context, index) {
+                Event _model = _controller.newEventList[index];
+                return featuredEvents(_model);
+              }));
+        }
+      }),
+    );
+  }
+
+  Widget buildUpcomingEvents() {
+    return SizedBox(
+      height: 300,
+      child: Obx(() {
+        if (_controller.isListLoading.value) {
+          return const Center();
+        } else if (_controller.errorMessage.isNotEmpty) {
+          return const Center(child: Text('An Error Occured'));
+        } else if (_controller.newEventList.isEmpty) {
+          return const Center(child: Text(''));
+        } else {
+          return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _controller.newEventList.length,
+              itemBuilder: ((context, index) {
+                Event _model = _controller.newEventList[index];
+                return upcomingEvents(_model);
+              }));
+        }
+      }),
+    );
   }
 
   Widget featuredEvents(Event _model) {
@@ -132,11 +154,11 @@ class _EventsState extends State<Events> {
         Get.to(() => EventDetailsPage(model: _model));
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: containerColor),
-            height: 250,
+            height: 240,
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,8 +200,10 @@ class _EventsState extends State<Events> {
                       )),
                       BtnElevated(
                         btnWidth: 110,
-                        btnHeight: 40,
-                        onPressed: () {},
+                        btnHeight: 35,
+                        onPressed: () {
+                          Get.to(() => EventDetailsPage(model: _model));
+                        },
                         child: Text(
                           'INTERESTED',
                           style: GoogleFonts.openSans(
@@ -210,71 +234,81 @@ class _EventsState extends State<Events> {
     );
   }
 
-  Widget upcomingEvents() {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: containerColor),
-        height: 270,
-        width: 300,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/images/registered_event.png',
-                      ),
-                      fit: BoxFit.cover)),
-              height: 150,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                'FREE',
-                style: GoogleFonts.openSans(
-                    color: yellowColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Text(
-                    'Urge Talk Conference',
+  Widget upcomingEvents(Event _model) {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => EventDetailsPage(model: _model));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), color: containerColor),
+            height: 280,
+            width: 300,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            _model.cover! ?? "",
+                          ),
+                          fit: BoxFit.cover)),
+                  height: 150,
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    capitalizeFirstLetter(_model.type!),
                     style: GoogleFonts.openSans(
-                        color: Colors.white,
+                        color: yellowColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w700),
-                  )),
-                  BtnElevated(
-                    btnWidth: 110,
-                    btnHeight: 40,
-                    onPressed: () {},
-                    child: Text(
-                      'REGISTER',
-                      style: GoogleFonts.openSans(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: Row(
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                          child: Text(
+                        _model.name!,
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700),
+                      )),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      BtnElevated(
+                        btnWidth: 100,
+                        btnHeight: 35,
+                        onPressed: () {
+                          Get.to(() => EventDetailsPage(model: _model));
+                        },
+                        child: Text(
+                          'REGISTER',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     IconButton(
                         onPressed: () {},
@@ -284,7 +318,7 @@ class _EventsState extends State<Events> {
                       width: 0,
                     ),
                     Text(
-                      '27 May, 2023',
+                      _model.date!,
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 14,
@@ -301,15 +335,17 @@ class _EventsState extends State<Events> {
                       width: 0,
                     ),
                     Text(
-                      '10:00AM',
+                      _model.time!,
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 14,
                           fontWeight: FontWeight.w400),
                     ),
                   ],
-                ))
-          ],
-        ));
+                ),
+              ],
+            )),
+      ),
+    );
   }
 }

@@ -46,7 +46,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       backgroundColor: appBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Form(
             key: _formKey,
             child: Column(
@@ -77,7 +77,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   },
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 CustomTextField(
                   controller: _newPasswordController,
@@ -102,7 +102,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   },
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
                 CustomTextField(
                   controller: _confirmNewPasswordController,
@@ -127,7 +127,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   },
                 ),
                 const SizedBox(
-                  height: 40,
+                  height: 60,
                 ),
                 BtnElevated(
                     isLoading: _authController.isLoading.value,

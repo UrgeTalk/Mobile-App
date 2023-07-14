@@ -3,12 +3,21 @@ import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
 
 class EventDetailsPage extends StatelessWidget {
-  const EventDetailsPage({super.key, required this.model});
+  EventDetailsPage({super.key, required this.model});
 
   final Event model;
+
+  bool isRegistered = false;
+
+  void registerForEvent() {
+    _controller.registerEvent(model);
+  }
+
+  final EventController _controller = Get.put(EventController());
 
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
@@ -42,7 +51,7 @@ class EventDetailsPage extends StatelessWidget {
         child: ListView(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -76,13 +85,13 @@ class EventDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.w700),
                       )),
                       BtnElevated(
-                        btnWidth: 110,
-                        btnHeight: 40,
+                        btnWidth: 100,
+                        btnHeight: 35,
                         onPressed: () {
-                          // Get.to(() => const Ticket());
+                          isRegistered ? null : registerForEvent();
                         },
                         child: Text(
-                          'REGISTER',
+                         isRegistered? 'REGISTERED': 'REGISTER',
                           style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -91,15 +100,19 @@ class EventDetailsPage extends StatelessWidget {
                       )
                     ],
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.calendar_month),
-                          color: Colors.white),
                       const SizedBox(
-                        width: 0,
+                        height: 20,
+                        width: 20,
+                        child: Icon(Icons.calendar_month, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        width: 15,
                       ),
                       Text(
                         model.date!,
@@ -111,12 +124,13 @@ class EventDetailsPage extends StatelessWidget {
                       const SizedBox(
                         width: 10,
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.access_time),
-                          color: Colors.white),
                       const SizedBox(
-                        width: 0,
+                        height: 20,
+                        width: 20,
+                        child: Icon(Icons.access_time, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        width: 10,
                       ),
                       Text(
                         model.time!,
@@ -127,17 +141,20 @@ class EventDetailsPage extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.location_on),
-                              color: Colors.white),
                           const SizedBox(
-                            width: 0,
+                            height: 20,
+                            width: 20,
+                            child: Icon(Icons.location_on, color: Colors.white),
+                          ),
+                          const SizedBox(
+                            width: 10,
                           ),
                           Text(
                             model.location!,
@@ -150,54 +167,59 @@ class EventDetailsPage extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Column(
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.favorite_border),
-                                  color: Colors.white),
-                              // Text(
-                              //   'Save',
-                              //   style: GoogleFonts.openSans(
-                              //       color: Colors.white,
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w400),
-                              // ),
-                            ],
+                          SizedBox(
+                            height: 45,
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  'Save',
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                'assets/images/share.png',
-                                height: 30,
-                                width: 30,
-                              )
-                              // Text(
-                              //   'Share',
-                              //   style: GoogleFonts.openSans(
-                              //       color: Colors.white,
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w400),
-                              // ),
-                            ],
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          SizedBox(
+                            height: 45,
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/images/share.png',
+                                  height: 20,
+                                  width: 30,
+                                ),
+                                Text(
+                                  'Share',
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       )
                     ],
                   ),
-                  Divider(
-                    color: dividerColor,
-                    height: 1,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   Text(
                     'Description',
                     style: GoogleFonts.openSans(
                         color: logoColor,
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(
@@ -217,7 +239,7 @@ class EventDetailsPage extends StatelessWidget {
                     'Tags',
                     style: GoogleFonts.openSans(
                         color: logoColor,
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(
@@ -226,9 +248,10 @@ class EventDetailsPage extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: List<Widget>.from(
-                model.tags!.map(
-                  (tag) => Chip(label: Text(tag.name)))),
+                    children: List<Widget>.from(model.tags!.map((tag) => Chip(
+                        label: Text(tag.name),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        backgroundColor: chipColor))),
                   ),
                   const SizedBox(
                     height: 10,
