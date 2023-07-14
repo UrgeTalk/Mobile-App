@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class HomeModel {
+class MasterClassModel {
   int? id;
   List<Tag>? tags;
   Speaker? speaker;
@@ -15,7 +15,7 @@ class HomeModel {
   String? coverImage;
   String? date;
 
-  HomeModel({
+  MasterClassModel({
     this.id,
     this.tags,
     this.speaker,
@@ -49,8 +49,8 @@ class HomeModel {
     };
   }
 
-  factory HomeModel.fromMap(Map<String, dynamic> map) {
-    return HomeModel(
+  factory MasterClassModel.fromMap(Map<String, dynamic> map) {
+    return MasterClassModel(
         id: map['id'],
         tags: List<Tag>.from(map['tags']?.map((x) => Tag.fromMap(x))),
         speaker: Speaker.fromMap(map['speaker']),
@@ -66,9 +66,9 @@ class HomeModel {
         date: map['date']);
   }
 
-  // String toJson() => json.encode(toMap());
-  // factory HomeModel.fromJson(String source) =>
-  //     HomeModel.fromJson(json.decode(source));
+  String toJson() => json.encode(toMap());
+  factory MasterClassModel.fromJson(String source) =>
+      MasterClassModel.fromJson(json.decode(source));
 }
 
 class Tag {
@@ -130,7 +130,7 @@ class Speaker {
         isSpeaker: map['is_speaker'],
         profilePicture: map['profile_picture']);
   }
-      String get fullName => "$firstName $lastName";
+    String get fullName => "$firstName $lastName";
 
   //   String toJson() => json.encode(toMap());
   // factory Speaker.fromJson(String source) =>

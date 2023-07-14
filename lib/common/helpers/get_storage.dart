@@ -17,4 +17,9 @@ class LocalStorage {
   static getUserId() {
     return GetStorage().read("id");
   }
+
+  static deleteToken() {
+    return GetStorage().remove("access");
+  }
+
 }

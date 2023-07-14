@@ -6,16 +6,34 @@ import 'package:urge/common/network/base_client.dart';
 import 'package:urge/common/network/base_controller.dart';
 
 class HomeService with BaseController {
-
   final introdata = GetStorage();
   BaseClient baseClient = BaseClient();
 
-    Future<dynamic> getAllVideos() async {
+  Future<dynamic> getAllTrendingVideos() async {
     return await baseClient.get(
       url,
-        '/home',
+      '/getTrendingVideos?page=1',
     );
   }
 
+  Future<dynamic> getLatestVideos() async {
+    return await baseClient.get(
+      url,
+      '/getLatestVideos?page=1',
+    );
+  }
 
+  Future<dynamic> getFeaturedVideos() async {
+    return await baseClient.get(
+      url,
+      '/getFeaturedVideos',
+    );
+  }
+
+    Future<dynamic> getRecommendedVideos() async {
+    return await baseClient.get(
+      url,
+      '/getRecommendedVideos',
+    );
+  }
 }

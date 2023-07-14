@@ -10,23 +10,93 @@ class HomeController extends GetxController with BaseController {
   var isLoading = false.obs;
   var isListLoading = false.obs;
   var errorMessage = ''.obs;
-  var videoList = <HomeModel>[].obs;
-    final featuredVideos = <HomeModel>[].obs;
-  final recommendedVideos = <HomeModel>[].obs;
+  var trendingVideos = <HomeModel>[].obs;
+  var featuredVideos = <HomeModel>[].obs;
+  var lastestVideos = <HomeModel>[].obs;
+  var recommendedVideos = <HomeModel>[].obs;
   var emptyMessage = 'No record available'.obs;
 
-  void getAllVideos() {
+  void getAllTrendingVideos() {
     isListLoading(true);
-    _homeService.getAllVideos().then((value) {
+    _homeService.getAllTrendingVideos().then((value) {
+      print(value['data']);
+      print('Now');
+      try {
+        if (value['message'] == "success") {
+          var trans = List<HomeModel>.from(
+              (value['data']).map((x) => HomeModel.fromMap(x)));
+          trendingVideos.value = trans;
+          print('Here');
+          print(trendingVideos.length);
+          isListLoading(false);
+        }
+      } catch (error) {
+        print(error);
+      }
+    }).catchError((error) {
+      isListLoading(false);
+      handleError(error);
+    });
+  }
+
+  void getLatestVideos() {
+    isListLoading(true);
+    _homeService.getLatestVideos().then((value) {
+      print(value['data']);
+      print('Now');
+      try {
+        if (value['message'] == "success") {
+          var trans = List<HomeModel>.from(
+              (value['data']).map((x) => HomeModel.fromMap(x)));
+          lastestVideos.value = trans;
+          print('Here');
+          print(lastestVideos.length);
+          isListLoading(false);
+        }
+      } catch (error) {
+        print(error);
+      }
+    }).catchError((error) {
+      isListLoading(false);
+      handleError(error);
+    });
+  }
+
+  void getFeaturedVideos() {
+    isListLoading(true);
+    _homeService.getFeaturedVideos().then((value) {
       print(value['data']);
       print('Now');
       try {
         if (value['message'] == "Ok") {
           var trans = List<HomeModel>.from(
-              (value['data']['Featured']).map((x) => HomeModel.fromMap(x)));
-          videoList.value = trans;
+              (value['data']).map((x) => HomeModel.fromMap(x)));
+          featuredVideos.value = trans;
           print('Here');
-          print(videoList.length);
+          print(featuredVideos.length);
+          isListLoading(false);
+        }
+      } catch (error) {
+        print(error);
+      }
+    }).catchError((error) {
+      isListLoading(false);
+      handleError(error);
+    });
+  }
+
+  void getRecommendedVideos() {
+    isListLoading(true);
+    _homeService.getRecommendedVideos().then((value) {
+      print(value['data']);
+      print('Now');
+      try {
+        if (value['message'] == "Ok") {
+          var trans = List<HomeModel>.from(
+              (value['data']).map((x) => HomeModel.fromMap(x)));
+          recommendedVideos.value = trans;
+          print('Here');
+          print(recommendedVideos.length);
           isListLoading(false);
         }
       } catch (error) {

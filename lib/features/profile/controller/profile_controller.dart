@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:urge/common/network/base_controller.dart';
+import 'package:urge/features/auth/views/login.dart';
 import 'package:urge/features/profile/services/profile_service.dart';
 import 'package:urge/features/profile/model/profile_model.dart';
 
@@ -24,11 +25,16 @@ class ProfileController extends GetxController with BaseController {
         print('Hey');
         print(_profileModel.fullName);
         isLoading(false);
-        update(['Profile Page']);
+        update(['Profile']);
       }
     }).catchError((e) {
       handleError(e);
       isLoading(false);
     });
+  }
+
+    void logOut() async {
+    Get.offAll(() => const Login());
+    introdata.remove('access');
   }
 }
