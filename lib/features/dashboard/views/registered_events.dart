@@ -19,8 +19,8 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
 
   @override
   void initState() {
-    _controller.getAllRegisteredEvents();
-    _controller.newEventList.value = _controller.eventList;
+   // _controller.getAllRegisteredEvents();
+    //_controller.newEventList.value = _controller.eventList;
     super.initState();
   }
 
@@ -60,25 +60,25 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                 const SizedBox(
                   height: 5,
                 ),
-                Expanded(
-                  child: Obx(() {
-                    if (_controller.isListLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_controller.errorMessage.isNotEmpty) {
-                      return const Center(child: Text('An Error Occured'));
-                    } else if (_controller.registeredList.isEmpty) {
-                      return const Center(child: Text('No Event Found'));
-                    } else {
-                      return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _controller.registeredList.length,
-                          itemBuilder: ((context, index) {
-                            Event _model = _controller.registeredList[index];
-                            return pastEvents(_model);
-                          }));
-                    }
-                  }),
-                ),
+                // Expanded(
+                //   child: Obx(() {
+                //     if (_controller.isListLoading.value) {
+                //       return const Center(child: CircularProgressIndicator());
+                //     } else if (_controller.errorMessage.isNotEmpty) {
+                //       return const Center(child: Text('An Error Occured'));
+                //     } else if (_controller.registeredList.isEmpty) {
+                //       return const Center(child: Text('No Event Found'));
+                //     } else {
+                //       return ListView.builder(
+                //           scrollDirection: Axis.horizontal,
+                //           itemCount: _controller.registeredList.length,
+                //           itemBuilder: ((context, index) {
+                //             Event _model = _controller.registeredList[index];
+                //             return pastEvents(_model);
+                //           }));
+                //     }
+                //   }),
+                // ),
                 const SizedBox(height: 10),
                 Text(
                   'Upcoming Events',
@@ -90,25 +90,25 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                 const SizedBox(
                   height: 10,
                 ),
-                Expanded(
-                  child: Obx(() {
-                    if (_controller.isLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_controller.errorMessage.isNotEmpty) {
-                      return const Center(child: Text('An Error Occured'));
-                    } else if (_controller.newEventList.isEmpty) {
-                      return const Center(child: Text('No Event Found'));
-                    } else {
-                      return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: _controller.newEventList.length,
-                          itemBuilder: ((context, index) {
-                            Event _model = _controller.newEventList[index];
-                            return pastEvents(_model);
-                          }));
-                    }
-                  }),
-                ),
+                // Expanded(
+                //   child: Obx(() {
+                //     if (_controller.isLoading.value) {
+                //       return const Center(child: CircularProgressIndicator());
+                //     } else if (_controller.errorMessage.isNotEmpty) {
+                //       return const Center(child: Text('An Error Occured'));
+                //     } else if (_controller.newEventList.isEmpty) {
+                //       return const Center(child: Text('No Event Found'));
+                //     } else {
+                //       return ListView.builder(
+                //           scrollDirection: Axis.vertical,
+                //           itemCount: _controller.newEventList.length,
+                //           itemBuilder: ((context, index) {
+                //             Event _model = _controller.newEventList[index];
+                //             return pastEvents(_model);
+                //           }));
+                //     }
+                //   }),
+                // ),
               ],
             ),
       )
