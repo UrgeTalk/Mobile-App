@@ -6,8 +6,10 @@ import 'package:urge/common/widgets/custom_textfield.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import 'package:urge/features/home/views/home.dart';
+import 'package:urge/features/home/views/home_details.dart';
 import 'package:urge/features/profile/controller/profile_controller.dart';
 import 'package:urge/features/profile/views/profile.dart';
 import 'package:urge/common/helpers/date_util.dart';
@@ -22,13 +24,13 @@ class TrendingVideos extends StatefulWidget {
 
 class _TrendingVideosState extends State<TrendingVideos> {
   final HomeController _homeController = Get.put(HomeController());
-  final ProfileController _profileController = Get.put(ProfileController());
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _homeController.getAllTrendingVideos();
-      _profileController.getProfile();
+      _authController.getProfile();
     });
 
     super.initState();
@@ -62,17 +64,30 @@ class _TrendingVideosState extends State<TrendingVideos> {
                     onTap: () {
                       Get.to(() => const Profile());
                     },
-                    child: Container(
-                      height: 35,
-                      width: 35,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
+                    child: CachedNetworkImage(
+                      imageUrl: _authController
+                          .profileModel.profilePicture ==
+                          null ||
+                          _authController
+                              .profileModel.profilePicture ==
+                              ''
+                          ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                          : _authController.profileModel.profilePicture!,
+                      placeholder: (context, url) =>
+                      const Center(),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.person,
+                        size: 35,
                       ),
-                      child: CircleAvatar(
-                        radius: 35,
-                        backgroundImage: NetworkImage(
-                            _profileController.profileModel.profilePicture ??
-                                ""),
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
                       ),
                     ),
                   )
@@ -114,7 +129,9 @@ class _TrendingVideosState extends State<TrendingVideos> {
 
   Widget trendingVideos(HomeModel _model) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => HomeDetails(model: _model));
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: SizedBox(

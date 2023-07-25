@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
 import 'package:urge/features/events/views/event_details.dart';
@@ -17,6 +19,7 @@ class Events extends StatefulWidget {
 
 class _EventsState extends State<Events> {
   final EventController _controller = Get.put(EventController());
+  final AuthController _authController = Get.put(AuthController());
 
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
@@ -29,6 +32,7 @@ class _EventsState extends State<Events> {
   void initState() {
     _controller.getAllEvents();
     _controller.newEventList.value = _controller.eventList;
+    _controller.newUpcomingList.value = _controller.upcomingList;
     super.initState();
   }
 
@@ -50,10 +54,32 @@ class _EventsState extends State<Events> {
                 onTap: () {
                   Get.to(() => const Profile());
                 },
-                child: const CircleAvatar(
-                    radius: 20,
-                    backgroundImage:
-                        AssetImage('assets/images/profile_pic.png')),
+                child: CachedNetworkImage(
+                  imageUrl: _authController
+                      .profileModel.profilePicture ==
+                      null ||
+                      _authController
+                          .profileModel.profilePicture ==
+                          ''
+                      ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                      : _authController.profileModel.profilePicture!,
+                  placeholder: (context, url) =>
+                  const Center(),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.person,
+                    size: 35,
+                  ),
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: 35,
+                    height: 35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 2),
+                      image: DecorationImage(
+                          image: imageProvider, fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
               )
             ],
           ),
@@ -109,7 +135,7 @@ class _EventsState extends State<Events> {
         if (_controller.isListLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (_controller.errorMessage.isNotEmpty) {
-          return const Center(child: Text('An Error Occured'));
+          return const Center(child: Text('An Error Occurred'));
         } else if (_controller.newEventList.isEmpty) {
           return const Center(child: Text('No Event Found'));
         } else {
@@ -132,15 +158,15 @@ class _EventsState extends State<Events> {
         if (_controller.isListLoading.value) {
           return const Center();
         } else if (_controller.errorMessage.isNotEmpty) {
-          return const Center(child: Text('An Error Occured'));
-        } else if (_controller.newEventList.isEmpty) {
+          return const Center(child: Text('An Error Occurred'));
+        } else if (_controller.newUpcomingList.isEmpty) {
           return const Center(child: Text(''));
         } else {
           return ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: _controller.newEventList.length,
+              itemCount: _controller.newUpcomingList.length,
               itemBuilder: ((context, index) {
-                Event _model = _controller.newEventList[index];
+                Event _model = _controller.newUpcomingList[index];
                 return upcomingEvents(_model);
               }));
         }

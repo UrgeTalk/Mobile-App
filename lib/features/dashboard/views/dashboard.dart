@@ -77,7 +77,7 @@ class _DashboardState extends State<Dashboard>
         tabs: const [
           SizedBox(
             child: Tab(
-              text: 'MEMBER',
+              text: 'INSIDER',
             ),
           ),
           SizedBox(

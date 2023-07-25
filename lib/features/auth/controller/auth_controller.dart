@@ -11,12 +11,20 @@ import 'package:urge/features/auth/views/otp_verification.dart';
 import 'package:urge/common/helpers/dialog_box.dart';
 import 'package:urge/features/auth/views/password_reset_otp.dart';
 
+import '../../profile/model/profile_model.dart';
+import '../../profile/services/profile_service.dart';
+
 class AuthController extends GetxController with BaseController {
   final AuthService _authService = AuthService();
+  final ProfileService _profileService = ProfileService();
 
   var isLoading = false.obs;
   var isSuccess = false.obs;
   final introdata = GetStorage();
+
+  ProfileModel _profileModel = ProfileModel();
+  ProfileModel get profileModel => _profileModel;
+
 
   void login({required String email, required String password}) {
     isLoading(true);
@@ -95,5 +103,22 @@ class AuthController extends GetxController with BaseController {
       handleError(e);
     });
   }
+
+  getProfile() {
+    _profileService.getProfile().then((value) {
+      if (value['message'] == "success") {
+        isLoading(false);
+        _profileModel = ProfileModel.fromMap(value['data']);
+        print('Hey');
+        print(_profileModel.fullName);
+        isLoading(false);
+        update(['Profile']);
+      }
+    }).catchError((e) {
+      handleError(e);
+      isLoading(false);
+    });
+  }
+
 
 }

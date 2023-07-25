@@ -17,6 +17,13 @@ class EventService with BaseController {
     );
   }
 
+  Future<dynamic> getSavedItems() async {
+    return await baseClient.get(
+      url,
+      '/getSavedItems',
+    );
+  }
+
   Future<dynamic> getRegisteredEvents() async {
     return await baseClient.get(
       url,

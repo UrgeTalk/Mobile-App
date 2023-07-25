@@ -1,29 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:urge/common/widgets/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
-import 'package:urge/features/events/model/event_model.dart';
+import 'package:urge/common/widgets/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:urge/features/home/controller/home_controller.dart';
+import '../model/event_model.dart';
 
-class EventDetailsPage extends StatelessWidget {
-  EventDetailsPage({super.key, required this.model});
-
+class EventDetailsPage extends StatefulWidget {
+  const EventDetailsPage({Key? key, required this.model}) : super(key: key);
   final Event model;
+  @override
+  State<EventDetailsPage> createState() => _EventDetailsPageState();
+}
+
+class _EventDetailsPageState extends State<EventDetailsPage> {
+  final EventController _controller = Get.put(EventController());
 
   bool isRegistered = false;
+  bool isClicked = false;
 
   void registerForEvent() {
-    _controller.registerEvent(model);
+    _controller.registerEvent(widget.model);
   }
-
-  final EventController _controller = Get.put(EventController());
 
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
       return text;
     }
     return text[0].toUpperCase() + text.substring(1);
+  }
+
+  void saveEventItem() {
+    setState(() {
+      isClicked = !isClicked;
+    });
+    if (isClicked) {
+      _controller.saveEventItem(widget.model);
+    } else {
+      _controller.saveEventItem(widget.model);
+    }
   }
 
   @override
@@ -61,14 +77,14 @@ class EventDetailsPage extends StatelessWidget {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                            image: NetworkImage(model.cover!),
+                            image: NetworkImage(widget.model.cover!),
                             fit: BoxFit.cover)),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
                   Text(
-                    capitalizeFirstLetter(model.type!),
+                    capitalizeFirstLetter(widget.model.type!),
                     style: GoogleFonts.openSans(
                         color: yellowColor,
                         fontSize: 12,
@@ -78,7 +94,7 @@ class EventDetailsPage extends StatelessWidget {
                     children: [
                       Expanded(
                           child: Text(
-                        model.name!,
+                        widget.model.name!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -91,7 +107,7 @@ class EventDetailsPage extends StatelessWidget {
                           isRegistered ? null : registerForEvent();
                         },
                         child: Text(
-                         isRegistered? 'REGISTERED': 'REGISTER',
+                          isRegistered ? 'REGISTERED' : 'REGISTER',
                           style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -115,7 +131,7 @@ class EventDetailsPage extends StatelessWidget {
                         width: 15,
                       ),
                       Text(
-                        model.date!,
+                        widget.model.date!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -133,7 +149,7 @@ class EventDetailsPage extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        model.time!,
+                        widget.model.time!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -157,7 +173,7 @@ class EventDetailsPage extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            model.location!,
+                            widget.model.location!,
                             style: GoogleFonts.openSans(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -171,12 +187,19 @@ class EventDetailsPage extends StatelessWidget {
                             height: 45,
                             child: Column(
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   height: 20,
                                   width: 20,
-                                  child: Icon(
-                                    Icons.favorite_border,
-                                    color: Colors.white,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      saveEventItem();
+                                    },
+                                    child: Icon(
+                                      isClicked
+                                          ? Icons.favorite_outlined
+                                          : Icons.favorite_border,
+                                      color: isClicked ? logoColor : Colors.white,
+                                    ),
                                   ),
                                 ),
                                 Text(
@@ -226,7 +249,7 @@ class EventDetailsPage extends StatelessWidget {
                     height: 5,
                   ),
                   Text(
-                    model.description!,
+                    widget.model.description!,
                     style: GoogleFonts.openSans(
                         color: Colors.white,
                         fontSize: 14,
@@ -248,10 +271,12 @@ class EventDetailsPage extends StatelessWidget {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children: List<Widget>.from(model.tags!.map((tag) => Chip(
+                    children: widget.model.tags!.map((tag) {
+                      return Chip(
                         label: Text(tag.name),
-                        labelStyle: const TextStyle(color: Colors.white),
-                        backgroundColor: chipColor))),
+                        backgroundColor: Colors.grey[300],
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(
                     height: 10,

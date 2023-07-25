@@ -34,9 +34,10 @@ class Event {
       "date": date,
       "time": time,
       "location": location,
-      "type": type,
       "amount": amount,
+      "type": type,
       "cover": cover,
+      //"tags": tags!.map((tag) => tag.toMap()).toList(),
       "tags": List<dynamic>.from(tags!.map((x) => x.toMap())),
     };
   }
@@ -48,10 +49,11 @@ class Event {
       date: map['date'],
       time: map['time'],
       location: map['location'],
-      type: map['type'],
       amount: map['amount'],
+      type: map['type'],
       description: map['description'],
       cover: map['cover'],
+      //tags: List<Tag>.from(map['tags']?.map((tag) => Tag.fromMap(tag))),
       tags: List<Tag>.from(map['tags'].map((x) => Tag.fromMap(x))),
     );
   }
