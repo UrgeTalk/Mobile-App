@@ -21,6 +21,33 @@ class HomeDetails extends StatefulWidget {
 }
 
 class _HomeDetailsState extends State<HomeDetails> {
+  final HomeController _homeController = Get.put(HomeController());
+
+  bool isClicked = false;
+  bool isLiked = false;
+
+  void saveVideoItem() {
+    setState(() {
+      isClicked = !isClicked;
+    });
+    if (isClicked) {
+      _homeController.saveVideoItem(widget.model);
+    } else {
+      _homeController.saveVideoItem(widget.model);
+    }
+  }
+
+  void likeItem() {
+    setState(() {
+      isLiked = !isLiked;
+    });
+    if (isLiked) {
+      _homeController.likeVideoItem(widget.model);
+    } else {
+      _homeController.likeVideoItem(widget.model);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final chewieController = ChewieController(
@@ -96,7 +123,7 @@ class _HomeDetailsState extends State<HomeDetails> {
                         ),
                         Text(
                           getStrDate(DateTime.parse(widget.model.date!),
-                                  pattern: "yyyy-MM-dd") ??
+                                  pattern: "dd MMMM, yyyy") ??
                               '',
                           style: GoogleFonts.openSans(
                               color: Colors.white,
@@ -142,12 +169,29 @@ class _HomeDetailsState extends State<HomeDetails> {
                           height: 45,
                           child: Column(
                             children: [
-                              const SizedBox(
+                              if(widget.model.saved == true)
+                              SizedBox(
                                 height: 20,
                                 width: 20,
                                 child: Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.white,
+                                  Icons.favorite_outlined,
+                                  color: logoColor,
+                                ),
+                              ),
+                              if(widget.model.saved == false)
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    saveVideoItem();
+                                  },
+                                  child: Icon(
+                                    isClicked
+                                        ? Icons.favorite_outlined
+                                        : Icons.favorite_border,
+                                    color: isClicked ? logoColor : Colors.white,
+                                  ),
                                 ),
                               ),
                               const SizedBox(
@@ -170,11 +214,31 @@ class _HomeDetailsState extends State<HomeDetails> {
                           height: 45,
                           child: Column(
                             children: [
-                              Image.asset(
-                                'assets/images/like_icon.png',
-                                height: 20,
-                                width: 30,
-                              ),
+                              if (widget.model.liked == true)
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Icon(
+                                    Icons.thumb_up_alt,
+                                    color: logoColor,
+                                  ),
+                                ),
+                              if (widget.model.liked == false)
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      likeItem();
+                                    },
+                                    child: Icon(
+                                      isLiked
+                                          ? Icons.thumb_up_alt
+                                          : Icons.thumb_up_alt_outlined,
+                                      color: isLiked ? logoColor : Colors.white,
+                                    ),
+                                  ),
+                                ),
                               const SizedBox(
                                 height: 3,
                               ),
@@ -266,7 +330,6 @@ class _HomeDetailsState extends State<HomeDetails> {
                           fontSize: 14,
                           fontWeight: FontWeight.w700),
                     ),
-
                   ],
                 ),
               )

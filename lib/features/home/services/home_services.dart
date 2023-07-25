@@ -36,4 +36,36 @@ class HomeService with BaseController {
       '/getRecommendedVideos',
     );
   }
+
+  Future<dynamic> getSavedItems() async {
+    return await baseClient.get(
+      url,
+      '/getSavedItems',
+    );
+  }
+
+    Future<dynamic> saveVideo(int? id) async {
+    try {
+      var map = <String, dynamic>{};
+      map['type'] = "master class";
+      map['id'] = id;
+      return await baseClient.post(
+          url, '/saveItem', map);
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+      Future<dynamic> likeVideo(int? id) async {
+    try {
+      var map = <String, dynamic>{};
+      map['masterclass_id'] = id;
+      return await baseClient.post(
+          url, '/like', map);
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+
 }

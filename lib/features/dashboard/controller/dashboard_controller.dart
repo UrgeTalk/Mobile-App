@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:urge/common/network/base_controller.dart';
 import 'package:urge/features/dashboard/services/dashboard_services.dart';
 import 'package:urge/features/dashboard/model/master_class_model.dart';
+import 'package:flutter/foundation.dart';
 
 class DashboardController extends GetxController with BaseController {
   final DashboardService _dashboardService = DashboardService();
@@ -21,11 +22,10 @@ class DashboardController extends GetxController with BaseController {
           var trans = List<MasterClassModel>.from(
               (value['data']).map((x) => MasterClassModel.fromMap(x)));
           masterClassList.value = trans;
-          print('Here');
           isListLoading(false);
         }
       } catch (error) {
-        print(error);
+        debugPrint(error.toString());
       }
     }).catchError((error) {
       isListLoading(false);

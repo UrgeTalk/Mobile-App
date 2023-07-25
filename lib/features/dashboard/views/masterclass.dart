@@ -51,9 +51,6 @@ class _MasterClassState extends State<MasterClass> {
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             children: [
-              const SizedBox(
-                height: 20,
-              ),
               Expanded(
                 child: Obx(() {
                   if (_dashboardController.isListLoading.value) {
@@ -83,64 +80,67 @@ class _MasterClassState extends State<MasterClass> {
       onTap: () {
        // Get.to(() => HomeDetails(model: _model));
       },
-      child: SizedBox(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  height: 100,
-                  width: 150,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                          image: NetworkImage(_model.coverImage! ?? ""),
-                          fit: BoxFit.cover)),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      _model.title! ?? "",
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      _model.speaker!.fullName ?? "",
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      getStrDate(DateTime.parse(_model.date!),
-                              pattern: "yyyy-MM-dd") ??
-                          '',
-                      style: GoogleFonts.openSans(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ))
-              ],
-            ),
-          ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: SizedBox(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 100,
+                    width: 150,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        image: DecorationImage(
+                            image: NetworkImage(_model.coverImage! ?? ""),
+                            fit: BoxFit.cover)),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        _model.title! ?? "",
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        _model.speaker!.fullName ?? "",
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        getStrDate(DateTime.parse(_model.date!),
+                                pattern: "yyyy-MM-dd") ??
+                            '',
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400),
+                      )
+                    ],
+                  ))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

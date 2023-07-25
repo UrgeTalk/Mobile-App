@@ -129,6 +129,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                         errorWidget: (context, url, error) => const Icon(
                           Icons.person,
                           size: 120,
+                          color: Colors.white,
                         ),
                         imageBuilder: (context, imageProvider) => Container(
                           width: 120,

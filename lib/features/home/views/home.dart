@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:urge/common/widgets/colors.dart';
@@ -7,8 +8,11 @@ import 'package:urge/features/home/model/home_model.dart';
 import 'package:urge/features/home/views/home_details.dart';
 import 'package:urge/features/home/views/latest_videos.dart';
 import 'package:urge/features/home/views/recommended_videos.dart';
+import 'package:urge/features/home/views/saved_videos.dart';
 import 'package:urge/features/home/views/trending_videos.dart';
 import 'package:urge/features/profile/views/profile.dart';
+
+import '../../auth/controller/auth_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,162 +23,215 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final HomeController _homeController = Get.put(HomeController());
+  final AuthController _authController = Get.put(AuthController());
+
+  bool isClicked = false;
+
 
   @override
   void initState() {
+    _authController.getProfile();
     _homeController.getFeaturedVideos();
     _homeController.getAllTrendingVideos();
     _homeController.getRecommendedVideos();
     _homeController.getLatestVideos();
+    _homeController.getSavedVideoItems();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: appBackgroundColor,
-          elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Hello, Charles!!!',
-                  style: GoogleFonts.openSans(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white)),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => const Profile());
-                },
-                child: const CircleAvatar(
-                    radius: 20,
-                    backgroundImage:
-                        AssetImage('assets/images/profile_pic.png')),
-              )
-            ],
-          ),
-        ),
-        backgroundColor: appBackgroundColor,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'View our latest videos on Urge Talk',
-                  style: GoogleFonts.openSans(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),
-                  textAlign: TextAlign.start,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('Featured',
-                    style: GoogleFonts.openSans(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white)),
-                const SizedBox(
-                  height: 5,
-                ),
-                buildFeaturedVideos(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Recommended',
-                        style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white)),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const RecommendedVideos());
-                      },
-                      child: Text('See all',
-                          style: GoogleFonts.openSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: logoColor)),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                buildRecommendedVideos(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Latest Videos',
-                        style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white)),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const LatestVideos());
-                      },
-                      child: Text('See all',
-                          style: GoogleFonts.openSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: logoColor)),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                buildLatestVideos(),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Trending Videos',
-                        style: GoogleFonts.openSans(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white)),
-                    GestureDetector(
-                      onTap: () {
-                        Get.to(() => const TrendingVideos());
-                      },
-                      child: Text('See all',
-                          style: GoogleFonts.openSans(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: logoColor)),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                buildTrendingVideos(),
-                const SizedBox(
-                  height: 10,
-                ),
-              ],
+    return GetBuilder<AuthController>(
+      id: 'Profile',
+        builder: (controller){
+        return Scaffold(
+            appBar: AppBar(
+              backgroundColor: appBackgroundColor,
+              elevation: 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                      'Hello, ${_authController.profileModel.fullName ?? ""}',
+                      style: GoogleFonts.openSans(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white)),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const SavedVideos());
+                        },
+                        child: const SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: Icon(
+                            Icons.favorite_border,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const Profile());
+                        },
+                        child: CachedNetworkImage(
+                          imageUrl: _authController
+                              .profileModel.profilePicture ==
+                              null ||
+                              _authController
+                                  .profileModel.profilePicture ==
+                                  ''
+                              ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                              : _authController.profileModel.profilePicture!,
+                          placeholder: (context, url) =>
+                          const Center(),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.person,
+                            size: 35,
+                          ),
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 35,
+                            height: 35,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ));
+            backgroundColor: appBackgroundColor,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'View our latest videos on Urge Talk',
+                      style: GoogleFonts.openSans(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                      textAlign: TextAlign.start,
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text('Featured',
+                        style: GoogleFonts.openSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white)),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildFeaturedVideos(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Recommended',
+                            style: GoogleFonts.openSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white)),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => const RecommendedVideos());
+                          },
+                          child: Text('See all',
+                              style: GoogleFonts.openSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: logoColor)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildRecommendedVideos(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Latest Videos',
+                            style: GoogleFonts.openSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white)),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => const LatestVideos());
+                          },
+                          child: Text('See all',
+                              style: GoogleFonts.openSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: logoColor)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildLatestVideos(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Trending Videos',
+                            style: GoogleFonts.openSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white)),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => const TrendingVideos());
+                          },
+                          child: Text('See all',
+                              style: GoogleFonts.openSans(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: logoColor)),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    buildTrendingVideos(),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              ),
+            ));
+        });
   }
 
   Widget buildFeaturedVideos() {
     return SizedBox(
         height: 250,
         child: Obx(() {
-          if (_homeController.isListLoading.value) {
+          if (_homeController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else if (_homeController.featuredVideos.isEmpty) {
             return const Center(child: Text('No video'));
@@ -194,7 +251,7 @@ class _HomeState extends State<Home> {
     return SizedBox(
         height: 280,
         child: Obx(() {
-          if (_homeController.isListLoading.value) {
+          if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.recommendedVideos.isEmpty) {
             return const Center(child: Text('No videos'));
@@ -214,7 +271,7 @@ class _HomeState extends State<Home> {
     return SizedBox(
         height: 260,
         child: Obx(() {
-          if (_homeController.isListLoading.value) {
+          if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.lastestVideos.isEmpty) {
             return const Center(child: Text('No videos'));
@@ -234,7 +291,7 @@ class _HomeState extends State<Home> {
     return SizedBox(
         height: 250,
         child: Obx(() {
-          if (_homeController.isListLoading.value) {
+          if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.trendingVideos.isEmpty) {
             return const Center(child: Text('No videos'));
