@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
@@ -96,8 +97,15 @@ class _TicketState extends State<Ticket> {
                                       fontWeight: FontWeight.w700),
                                 ),
                               ),
+                              if(widget.model.type == "free")
+                                Text('Free',
+                                    style: GoogleFonts.openSans(
+                                        color: logoColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w700)),
+                              if (widget.model.type == "paid")
                               Text(
-                                capitalizeFirstLetter(widget.model.type!),
+                                capitalizeFirstLetter(widget.model.amount.toString()),
                                 style: GoogleFonts.openSans(
                                     color: logoColor,
                                     fontSize: 12,
@@ -129,7 +137,9 @@ class _TicketState extends State<Ticket> {
                                         fontWeight: FontWeight.w700),
                                   ),
                                   Text(
-                                    widget.model.date!,
+                                    getStrDate(DateTime.parse(widget.model.date!),
+                                        pattern: "dd MMMM, yyyy") ??
+                                        '',
                                     style: GoogleFonts.openSans(
                                         color: Colors.white,
                                         fontSize: 14,

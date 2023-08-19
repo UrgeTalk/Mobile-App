@@ -1,20 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:urge/common/widgets/custom_textfield.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
-import 'package:urge/features/home/views/home.dart';
-import 'package:urge/features/home/views/home_details.dart';
-import 'package:urge/features/profile/controller/profile_controller.dart';
-import 'package:urge/features/profile/views/profile.dart';
-import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/features/home/model/home_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:urge/features/home/views/home_details.dart';
+import 'package:urge/features/profile/views/profile.dart';
 
 class LatestVideos extends StatefulWidget {
   const LatestVideos({super.key});
@@ -63,16 +57,11 @@ class _LatestVideosState extends State<LatestVideos> {
                 Get.to(() => const Profile());
               },
               child: CachedNetworkImage(
-                imageUrl: _authController
-                    .profileModel.profilePicture ==
-                    null ||
-                    _authController
-                        .profileModel.profilePicture ==
-                        ''
+                imageUrl: _authController.profileModel.profilePicture == null ||
+                        _authController.profileModel.profilePicture == ''
                     ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
                     : _authController.profileModel.profilePicture!,
-                placeholder: (context, url) =>
-                const Center(),
+                placeholder: (context, url) => const Center(),
                 errorWidget: (context, url, error) => const Icon(
                   Icons.person,
                   size: 35,
@@ -176,7 +165,7 @@ class _LatestVideosState extends State<LatestVideos> {
                       ),
                       Text(
                         getStrDate(DateTime.parse(_model.date!),
-                                pattern: "yyyy-MM-dd") ??
+                                pattern: "dd MMMM, yyyy") ??
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,

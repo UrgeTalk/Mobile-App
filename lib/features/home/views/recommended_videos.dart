@@ -176,7 +176,7 @@ class _RecommendedVideosState extends State<RecommendedVideos> {
                       ),
                       Text(
                         getStrDate(DateTime.parse(_model.date!),
-                                pattern: "yyyy-MM-dd") ??
+                                pattern: "dd MMMM, yyyy") ??
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,

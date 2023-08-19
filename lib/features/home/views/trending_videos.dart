@@ -159,7 +159,7 @@ class _TrendingVideosState extends State<TrendingVideos> {
                         height: 5,
                       ),
                       Text(
-                        _model.title! ?? "",
+                        _model.title!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -180,7 +180,7 @@ class _TrendingVideosState extends State<TrendingVideos> {
                       ),
                       Text(
                         getStrDate(DateTime.parse(_model.date!),
-                                pattern: "yyyy-MM-dd") ??
+                                pattern: "dd MMMM, yyyy") ??
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,

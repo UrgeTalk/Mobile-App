@@ -20,6 +20,30 @@ class ProfileService with BaseController {
     }
   }
 
+  Future<dynamic> editProfile(String firstName, String lastName) async {
+    try {
+      return await baseClient.post(url, '/editProfile', {
+        "first_name": firstName,
+        "last_name": lastName
+      });
+    }catch (error) {
+    return Future.error(error);
+    }
+  }
+
+    Future<dynamic> speakerRequest() async {
+      try {
+        return await baseClient.post(
+          url,
+          '/speakerRequest',
+          ""
+
+        );
+      } catch (error) {
+        return Future.error(error);
+      }
+    }
+
 
 
 }

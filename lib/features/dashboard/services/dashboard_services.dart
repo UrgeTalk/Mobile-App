@@ -17,5 +17,16 @@ class DashboardService with BaseController {
     );
   }
 
+  Future<dynamic> speakerRequest() async {
+      return await baseClient.post(
+          url,
+          '/speakerRequest', {});
+
+  }
+
+  Future<dynamic> applicationStatus() async {
+      return await baseClient.get(
+      url, '/getSpeakerApplicationProgress');
+  }
 
 }

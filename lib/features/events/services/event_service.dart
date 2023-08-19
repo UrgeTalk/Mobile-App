@@ -17,6 +17,13 @@ class EventService with BaseController {
     );
   }
 
+  Future<dynamic> getAllAnonymousEvents() async {
+    return await baseClient.get2(
+      url,
+      '/anon/events',
+    );
+  }
+
   Future<dynamic> getSavedItems() async {
     return await baseClient.get(
       url,

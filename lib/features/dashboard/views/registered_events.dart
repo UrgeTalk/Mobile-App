@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
@@ -48,6 +49,7 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(
                   height: 20,
@@ -61,23 +63,27 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                   height: 5,
                 ),
                 Expanded(
-                  child: Obx(() {
-                    if (_controller.isListLoading.value) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (_controller.errorMessage.isNotEmpty) {
-                      return const Center(child: Text('An Error Occurred'));
-                    } else if (_controller.registeredList.isEmpty) {
-                      return const Center(child: Text('No Registered Event Found'));
-                    } else {
-                      return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _controller.registeredList.length,
-                          itemBuilder: ((context, index) {
-                            Event _model = _controller.registeredList[index];
-                            return pastEvents(_model);
-                          }));
-                    }
-                  }),
+                  child: SizedBox(
+                    height: 250,
+                    child: Obx(() {
+                      if (_controller.isListLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (_controller.errorMessage.isNotEmpty) {
+                        return const Center(child: Text('An Error Occurred'));
+                      } else if (_controller.registeredList.isEmpty) {
+                        return const Center(child: Text('No Event',
+                        style: TextStyle(color: Colors.white),));
+                      } else {
+                        return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _controller.registeredList.length,
+                            itemBuilder: ((context, index) {
+                              Event _model = _controller.registeredList[index];
+                              return pastEvents(_model);
+                            }));
+                      }
+                    }),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -90,25 +96,28 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                 const SizedBox(
                   height: 10,
                 ),
-                // Expanded(
-                //   child: Obx(() {
-                //     if (_controller.isLoading.value) {
-                //       return const Center(child: CircularProgressIndicator());
-                //     } else if (_controller.errorMessage.isNotEmpty) {
-                //       return const Center(child: Text('An Error Occured'));
-                //     } else if (_controller.newEventList.isEmpty) {
-                //       return const Center(child: Text('No Event Found'));
-                //     } else {
-                //       return ListView.builder(
-                //           scrollDirection: Axis.vertical,
-                //           itemCount: _controller.newEventList.length,
-                //           itemBuilder: ((context, index) {
-                //             Event _model = _controller.newEventList[index];
-                //             return pastEvents(_model);
-                //           }));
-                //     }
-                //   }),
-                // ),
+                Expanded(
+                  child: Obx(() {
+                    if (_controller.isListLoading.value) {
+                      return const Center(child: Center());
+                    } else if (_controller.errorMessage.isNotEmpty) {
+                      return const Center(child: Text('An Error Occurred'));
+                    } else if (_controller.registeredList.isEmpty) {
+                      return const Center(child: Text(''));
+                    } else {
+                      return ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _controller.registeredList.length,
+                          itemBuilder: ((context, index) {
+                            Event _model = _controller.registeredList[index];
+                            return pastEvents(_model);
+                          }));
+                    }
+                  }),
+                ),
+                const SizedBox(
+                  height: 20,
+                )
               ],
             ),
       )
@@ -125,7 +134,7 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10), color: containerColor),
-            height: 250,
+            height: 240,
             width: 300,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +155,9 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    _model.date!,
+                    getStrDate(DateTime.parse(_model.date!),
+                        pattern: "dd MMMM, yyyy") ??
+                        '',
                     style: GoogleFonts.openSans(
                         color: logoColor,
                         fontSize: 14,
@@ -168,7 +179,9 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                       BtnElevated(
                         btnWidth: 110,
                         btnHeight: 40,
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(() => EventDetails(model: _model));
+                        },
                         child: Text(
                           'INTERESTED',
                           style: GoogleFonts.openSans(

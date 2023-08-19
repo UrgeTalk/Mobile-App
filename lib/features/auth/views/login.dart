@@ -94,24 +94,17 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                           controller: _emailController,
                           hintText: 'Email Address',
+                          hintStyle: const TextStyle(color: Colors.white),
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.email_outlined),
                             color: Colors.white,
                             onPressed: () {},
                           ),
-                          onChanged: (val) {
-                            validateEmail(val);
-                          },
                           validator: (value) {
-                            if (value == '') {
-                              return "Field cannot be empty";
+                            if (value!= '') {
+                              return null;
                             } else {
-                              bool result = validateEmail(value!);
-                              if (result) {
-                                return null;
-                              } else {
-                                return "Email format not correct";
-                              }
+                              return 'Field cannot be empty';
                             }
                           }),
                       const SizedBox(
@@ -120,6 +113,7 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                         controller: _passwordController,
                         hintText: 'Password',
+                        hintStyle: const TextStyle(color: Colors.white),
                         suffixIcon: IconButton(
                           icon: Icon(
                               obscurePassword

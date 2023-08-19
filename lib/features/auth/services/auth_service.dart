@@ -65,6 +65,16 @@ class AuthService with BaseController {
     }
   }
 
+  Future<dynamic> resendOTP(String email) async {
+    try {
+      return await baseClient.post(url, '/resendOTP', {
+        "email": email,
+      });
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
     Future<dynamic> resetPassword(String email, String password, String otpCode) async {
     try {
       return await baseClient.post(
@@ -73,6 +83,19 @@ class AuthService with BaseController {
             "email": email,
             "password": password,
             "otp": otpCode,
+      });
+    } catch (error) {
+      return Future.error(error);
+    }
+  }
+
+  Future<dynamic> changePassword(String currentPassword, String newPassword) async {
+    try {
+      return await baseClient.post(
+          url,
+          '/changePassword', {
+        "password": currentPassword,
+        "new_password": newPassword,
       });
     } catch (error) {
       return Future.error(error);

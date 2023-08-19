@@ -16,6 +16,20 @@ class HomeService with BaseController {
     );
   }
 
+  Future<dynamic> getAllVideos() async {
+    return await baseClient.get(
+      url,
+      '/home',
+    );
+  }
+
+  Future<dynamic> getAllAnonymousVideos() async {
+    return await baseClient.get2(
+      url,
+      '/anon/home',
+    );
+  }
+
   Future<dynamic> getLatestVideos() async {
     return await baseClient.get(
       url,
@@ -30,7 +44,7 @@ class HomeService with BaseController {
     );
   }
 
-    Future<dynamic> getRecommendedVideos() async {
+  Future<dynamic> getRecommendedVideos() async {
     return await baseClient.get(
       url,
       '/getRecommendedVideos',
@@ -44,28 +58,24 @@ class HomeService with BaseController {
     );
   }
 
-    Future<dynamic> saveVideo(int? id) async {
+  Future<dynamic> saveVideo(int? id) async {
     try {
       var map = <String, dynamic>{};
       map['type'] = "master class";
       map['id'] = id;
-      return await baseClient.post(
-          url, '/saveItem', map);
+      return await baseClient.post(url, '/saveItem', map);
     } catch (error) {
       return Future.error(error);
     }
   }
 
-      Future<dynamic> likeVideo(int? id) async {
+  Future<dynamic> likeVideo(int? id) async {
     try {
       var map = <String, dynamic>{};
       map['masterclass_id'] = id;
-      return await baseClient.post(
-          url, '/like', map);
+      return await baseClient.post(url, '/like', map);
     } catch (error) {
       return Future.error(error);
     }
   }
-
-
 }

@@ -57,6 +57,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _currentPasswordController,
                   hintText: 'Current Password',
+                  hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -82,6 +83,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _newPasswordController,
                   hintText: 'New Password',
+                  hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -107,6 +109,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _confirmNewPasswordController,
                   hintText: 'Confirm New Password',
+                  hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -119,28 +122,39 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   obscureText: !obscurePassword,
                   validator: (value) {
-                    if (value != '') {
-                      return null;
-                    } else {
+                    if (value == '') {
                       return "Field cannot be empty";
+                    } else {
+                      if (_newPasswordController.text ==
+                          _confirmNewPasswordController.text) {
+                        return null;
+                      } else {
+                        return 'Passwords do not match';
+                      }
                     }
                   },
                 ),
                 const SizedBox(
                   height: 60,
                 ),
-                BtnElevated(
-                    isLoading: _authController.isLoading.value,
-                    child: Text(
-                      'Reset Password',
-                      style: GoogleFonts.openSans(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {}
-                    }),
+                Obx(() =>
+                    BtnElevated(
+                        isLoading: _authController.isLoading.value,
+                        child: Text(
+                          'Reset Password',
+                          style: GoogleFonts.openSans(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _authController.changePassword(
+                                _newPasswordController.text,
+                                _currentPasswordController.text);
+                          }
+                        }),
+                )
               ],
             ),
           ),

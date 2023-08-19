@@ -31,12 +31,12 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _authController.getProfile();
-    _homeController.getFeaturedVideos();
-    _homeController.getAllTrendingVideos();
-    _homeController.getRecommendedVideos();
-    _homeController.getLatestVideos();
+    _homeController.getAllVideos();
     _homeController.getSavedVideoItems();
-
+    _homeController.newFeaturedVideos.value = _homeController.featuredVideoItems;
+    _homeController.newRecommendedVideos.value = _homeController.recommendedVideoItems;
+    _homeController.newTrendingVideos.value = _homeController.trendingVideoItems;
+    _homeController.newLatestVideos.value = _homeController.latestVideoItems;
     super.initState();
   }
 
@@ -52,25 +52,27 @@ class _HomeState extends State<Home> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                      'Hello, ${_authController.profileModel.fullName ?? ""}',
-                      style: GoogleFonts.openSans(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white)),
+                  Expanded(
+                    child: Text(
+                        'Hello, ${_authController.profileModel.firstName ?? ""} ${_authController.profileModel.lastName ?? ""}',
+                        style: GoogleFonts.openSans(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.white),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   Row(
                     children: [
                       GestureDetector(
                         onTap: () {
                           Get.to(() => const SavedVideos());
                         },
-                        child: const SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
-                          ),
+                        child: SizedBox(
+                          height: 25,
+                          width: 25,
+                          child: Image.asset('assets/images/saved_icon.png',
+                          height: 25, width: 25)
                         ),
                       ),
                       const SizedBox(
@@ -233,14 +235,14 @@ class _HomeState extends State<Home> {
         child: Obx(() {
           if (_homeController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
-          } else if (_homeController.featuredVideos.isEmpty) {
-            return const Center(child: Text('No video'));
+          } else if (_homeController.newFeaturedVideos.isEmpty) {
+            return Center(child: Text('No Featured videos yet', style: TextStyle(color: Colors.white),));
           } else {
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _homeController.featuredVideos.length,
+                itemCount: _homeController.newFeaturedVideos.length,
                 itemBuilder: ((context, index) {
-                  HomeModel video = _homeController.featuredVideos[index];
+                  HomeModel video = _homeController.newFeaturedVideos[index];
                   return featured(video);
                 }));
           }
@@ -253,14 +255,14 @@ class _HomeState extends State<Home> {
         child: Obx(() {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
-          } else if (_homeController.recommendedVideos.isEmpty) {
-            return const Center(child: Text('No videos'));
+          } else if (_homeController.newRecommendedVideos.isEmpty) {
+            return Center(child: Text('No videos', style: TextStyle(color: Colors.white),));
           } else {
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _homeController.recommendedVideos.length,
+                itemCount: _homeController.newRecommendedVideos.length,
                 itemBuilder: ((context, index) {
-                  HomeModel video = _homeController.recommendedVideos[index];
+                  HomeModel video = _homeController.newRecommendedVideos[index];
                   return recommended(video);
                 }));
           }
@@ -273,14 +275,14 @@ class _HomeState extends State<Home> {
         child: Obx(() {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
-          } else if (_homeController.lastestVideos.isEmpty) {
-            return const Center(child: Text('No videos'));
+          } else if (_homeController.newLatestVideos.isEmpty) {
+            return Center(child: Text('No videos', style: TextStyle(color: Colors.white),));
           } else {
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _homeController.lastestVideos.length,
+                itemCount: _homeController.newLatestVideos.length,
                 itemBuilder: ((context, index) {
-                  HomeModel video = _homeController.lastestVideos[index];
+                  HomeModel video = _homeController.newLatestVideos[index];
                   return latest(video);
                 }));
           }
@@ -293,14 +295,14 @@ class _HomeState extends State<Home> {
         child: Obx(() {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
-          } else if (_homeController.trendingVideos.isEmpty) {
-            return const Center(child: Text('No videos'));
+          } else if (_homeController.newTrendingVideos.isEmpty) {
+            return Center(child: Text('No videos', style: TextStyle(color: Colors.white),));
           } else {
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _homeController.trendingVideos.length,
+                itemCount: _homeController.newTrendingVideos.length,
                 itemBuilder: ((context, index) {
-                  HomeModel video = _homeController.trendingVideos[index];
+                  HomeModel video = _homeController.newTrendingVideos[index];
                   return trending(video);
                 }));
           }
@@ -332,7 +334,7 @@ class _HomeState extends State<Home> {
             ),
             Text(video.title! ?? "",
                 style: GoogleFonts.openSans(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Colors.white)),
             Row(
@@ -480,7 +482,7 @@ class _HomeState extends State<Home> {
             ),
             Text(video.title!,
                 style: GoogleFonts.openSans(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Colors.white)),
             Row(

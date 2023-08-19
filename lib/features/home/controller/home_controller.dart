@@ -24,40 +24,50 @@ class HomeController extends GetxController with BaseController {
   List<SavedItemsModel> savedItems = [];
   var savedVideos = <HomeModel>[].obs;
   var newSavedVideos = <HomeModel>[].obs;
+  var featuredVideoItems = <HomeModel>[].obs;
+  var recommendedVideoItems = <HomeModel>[].obs;
+  var trendingVideoItems = <HomeModel>[].obs;
+  var latestVideoItems = <HomeModel>[].obs;
+  var newFeaturedVideos = <HomeModel>[].obs;
+  var newRecommendedVideos = <HomeModel>[].obs;
+  var newTrendingVideos = <HomeModel>[].obs;
+  var newLatestVideos = <HomeModel>[].obs;
 
 
   List<SavedEvents> latestVideos = [];
   bool isLoaded = false;
 
-  // Future<void> getLatest() async {
-  //   isLoaded = true;
-  //
-  //   try {
-  //     final response =
-  //         await http.get(Uri.parse('https://api.urgetalks.com/getSavedItems'));
-  //
-  //     if (response.statusCode == 200) {
-  //       final data = json.decode(response.body);
-  //
-  //       if (data['message'] == 'Ok') {
-  //         final eventsData = data['data'][0]['events'];
-  //         final videosData = data['data'][0]['videos'];
-  //
-  //         latestVideos = List<SavedEvents>.from(
-  //             eventsData.map((event) => SavedEvents.fromMap(event)));
-  //         print('How far???');
-  //
-  //         // Alternatively, if you also want to include videos in latestVideos list:
-  //         // latestVideos = List<Event>.from([...eventsData, ...videosData].map((event) => Event.fromMap(event)));
-  //
-  //         isLoaded = false;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     print(error);
-  //     isLoaded = false;
-  //   }
-  // }
+  void getAllVideos(){
+   isListLoading(true);
+   _homeService.getAllVideos().then((value){
+     print(value['data']);
+     try {
+       if(value['message'] == "Ok"){
+         var featuredList =
+             List<HomeModel>.from((value['data']['Featured']).map((x) => HomeModel.fromMap(x)));
+         featuredVideoItems.value = featuredList;
+         var recommendedList =
+         List<HomeModel>.from((value['data']['Recommended']).map((x) => HomeModel.fromMap(x)));
+         recommendedVideoItems.value = recommendedList;
+         var trendingList =
+         List<HomeModel>.from((value['data']['Trending']).map((x) => HomeModel.fromMap(x)));
+         trendingVideoItems.value = trendingList;
+         var latestList =
+         List<HomeModel>.from((value['data']['Latest']).map((x) => HomeModel.fromMap(x)));
+         latestVideoItems.value = latestList;
+         print('Here are some videos');
+         isListLoading(false);
+         update(['Details']);
+
+       }
+     }catch (error) {
+       print(error);
+     }
+   }).catchError((error) {
+     isListLoading(false);
+     handleError(error);
+   });
+  }
 
   void getAllTrendingVideos() {
     isListLoading(true);
@@ -187,7 +197,7 @@ class HomeController extends GetxController with BaseController {
     void likeVideoItem(HomeModel model) {
     isLoading(true);
     _homeService.likeVideo(model.id).then((value){
-      if(value['status'] == 200){
+      if(value['message'] == "MasterClass liked successfully"){
         showSnackBar(content: "Video successfully Liked!");
       }
     }).catchError((error) {

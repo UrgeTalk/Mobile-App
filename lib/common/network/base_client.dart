@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
-import 'package:urge/common/network/app_exception.dart';
-import 'package:urge/common/network/base_controller.dart';
-import 'package:urge/common/network/dialog_help.dart';
 import 'package:urge/common/helpers/simple_log_printer.dart';
-import 'package:urge/common/network/base_client.dart';
+import 'package:urge/common/network/app_exception.dart';
 
 const String _authUrl = "https://api.urgetalks.com";
+
 String get url => _authUrl;
 
 class BaseClient {
@@ -22,14 +21,12 @@ class BaseClient {
 
   Map<String, String> headers = {
     "Content-Type": "application/json",
-     "Accept": "*/*"
+    "Accept": "*/*"
   };
 
-    Map<String, String> header = {
+  Map<String, String> header = {
     "Authorization": "Bearer Token",
   };
-
-
 
   Map<String, String> authorization = {
     "Authorization": "Bearer Token",
@@ -45,7 +42,7 @@ class BaseClient {
     if (token != null) {
       headers = {
         "Content-Type": "application/json",
-        'authorization': "Bearer $token"
+        'Authorization': "Bearer $token"
       };
     }
     try {
@@ -97,11 +94,42 @@ class BaseClient {
     var uri = Uri.parse(baseUrl + api);
 
     if (token != null) {
-      header = {
-        'Authorization':
-            "Bearer $token"
+      authorization = {
+        "Content-Type": "application/json",
+        'Authorization': "Bearer $token"
       };
+      print("Bearer $token");
     }
+    try {
+      if (kDebugMode) {
+        getLogger().d(''' URL:: $uri,
+                 print:: ${json.encode(authorization)},
+         header:: ${json.encode(authorization)}''');
+      }
+
+      var response = await http
+          .get(uri, headers: authorization)
+          .timeout(const Duration(seconds: TIME_OUT_DURATION));
+
+      if (kDebugMode) {
+        getLogger().d(
+            'Received Response status code is :${response.statusCode} and response body is  ${response.body} ');
+      }
+
+      return _processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet connection', uri.toString());
+    } on TimeoutException {
+      throw ApiNotRespondingException(
+          'API not responded in time', uri.toString());
+    }
+  }
+
+  //GET FOR ANONYMOUS
+  Future<dynamic> get2(String baseUrl, String api, {bool use2 = false}) async {
+    //var token = introdata.read('access');
+    var uri = Uri.parse(baseUrl + api);
+
     try {
       if (kDebugMode) {
         getLogger().d(''' URL:: $uri,
@@ -144,11 +172,11 @@ class BaseClient {
       case 401:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
         throw BadRequestException(
-            responseJson['detail'], response.request!.url.toString());
+            responseJson['message'], response.request!.url.toString());
       case 403:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
         throw UnAuthorizedException(
-            responseJson['detail'], response.request!.url.toString());
+            responseJson['message'], response.request!.url.toString());
       case 404:
         var responseJson = json.decode(utf8.decode(response.bodyBytes));
         throw BadRequestException(responseJson['error'] ?? 'An error occurred',

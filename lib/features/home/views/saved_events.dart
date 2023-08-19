@@ -51,7 +51,7 @@ class _SavedEventsState extends State<SavedEvents> {
   Widget _savedEvents() {
     return Expanded(
         child:Obx(() {
-          if (_eventController.isListLoading.value) {
+          if (_eventController.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else if (_eventController.savedEvent.isEmpty) {
             return const Center(child: Text('No Saved Event',
