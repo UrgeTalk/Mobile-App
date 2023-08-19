@@ -25,6 +25,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool obscurePassword = false;
+  bool _obscureConfirmPassText = false;
 
   final AuthController _authController = Get.put(AuthController());
 
@@ -48,7 +49,7 @@ class _RegisterState extends State<Register> {
               child: ListView(
             children: [
               const SizedBox(
-                height: 150,
+                height: 70,
               ),
               Align(
                 alignment: Alignment.center,
@@ -99,14 +100,14 @@ class _RegisterState extends State<Register> {
                     child: CustomTextField(
                       controller: _firstNameController,
                       hintText: 'First Name',
+                      hintStyle: const TextStyle(color: Colors.white),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.person_outline),
+                        color: Colors.white,
                         onPressed: () {},
                       ),
                       validator: (value) {
-                        if (value == '') {
-                          return null;
-                        } else {
+                        if (value!.isEmpty) {
                           return "Field cannot be empty";
                         }
                       },
@@ -119,12 +120,14 @@ class _RegisterState extends State<Register> {
                     child: CustomTextField(
                       controller: _lastNameController,
                       hintText: 'Last Name',
+                      hintStyle: const TextStyle(color: Colors.white),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.person_outline),
+                        color: Colors.white,
                         onPressed: () {},
                       ),
                       validator: (value) {
-                        if (value == '') {
+                        if (value != '') {
                           return null;
                         } else {
                           return "Field cannot be empty";
@@ -140,24 +143,22 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                   controller: _emailController,
                   hintText: 'Email Address',
+                  hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.person_outline),
+                    color: Colors.white,
                     onPressed: () {},
                   ),
                   onChanged: (val) {
                     validateEmail(val);
                   },
                   validator: (value) {
-                    if (value == '') {
-                      return "Field cannot be empty";
-                    } else {
-                      bool result = validateEmail(value!);
-                      if (result) {
-                        return null;
-                      } else {
-                        return "Email format not correct";
-                      }
+                    if (value != '') {
+                      return null;
                     }
+                       else {
+                        return "Email cannot be empty";
+                      }
                   }),
               const SizedBox(
                 height: 25,
@@ -165,8 +166,10 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                 controller: _passwordController,
                 hintText: 'Password',
+                hintStyle: const TextStyle(color: Colors.white),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.remove_red_eye),
+                  color: Colors.white,
                   onPressed: () {
                     setState(() {
                       obscurePassword = !obscurePassword;
@@ -188,20 +191,26 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                 controller: _confirmPasswordController,
                 hintText: 'Confirm Password',
+                hintStyle: const TextStyle(color: Colors.white),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.remove_red_eye),
+                  color: Colors.white,
                   onPressed: () {
                     setState(() {
-                      obscurePassword = !obscurePassword;
+                      _obscureConfirmPassText = !_obscureConfirmPassText;
                     });
                   },
                 ),
-                obscureText: !obscurePassword,
+                obscureText: !_obscureConfirmPassText,
                 validator: (value) {
-                  if (value != '') {
-                    return null;
+                  if (value == '') {
+                    return "Please enter your password again";
                   } else {
-                    return "Field cannot be empty";
+                    if (_passwordController.text == _confirmPasswordController.text) {
+                      return null;
+                    } else {
+                      return 'Password do not match';
+                    }
                   }
                 },
               ),

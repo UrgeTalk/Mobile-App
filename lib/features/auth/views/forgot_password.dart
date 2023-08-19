@@ -63,8 +63,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             CustomTextField(
                 controller: _emailController,
                 hintText: 'Email Address',
+                hintStyle: const TextStyle(color: Colors.white),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.email_outlined),
+                  color: Colors.white,
                   onPressed: () {},
                 ),
                 onChanged: (val) {

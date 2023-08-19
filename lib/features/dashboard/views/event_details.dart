@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/dashboard/views/ticket.dart';
+import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
 
 class EventDetails extends StatefulWidget {
@@ -16,11 +18,25 @@ class EventDetails extends StatefulWidget {
 }
 
 class _EventDetailsState extends State<EventDetails> {
+  final EventController _controller = Get.put(EventController());
+  bool isClicked = false;
+
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
       return text;
     }
     return text[0].toUpperCase() + text.substring(1);
+  }
+
+  void saveEventItem() {
+    setState(() {
+      isClicked = !isClicked;
+    });
+    if (isClicked) {
+      _controller.saveEventItem(widget.model);
+    } else {
+      _controller.saveEventItem(widget.model);
+    }
   }
 
   @override
@@ -64,13 +80,20 @@ class _EventDetailsState extends State<EventDetails> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    capitalizeFirstLetter(widget.model.type!),
-                    style: GoogleFonts.openSans(
-                        color: yellowColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700),
-                  ),
+                  if (widget.model.type == "free")
+                    Text('Free',
+                        style: GoogleFonts.openSans(
+                            color: yellowColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  if (widget.model.type == "paid")
+                    Text(
+                      capitalizeFirstLetter(widget.model.amount.toString()),
+                      style: GoogleFonts.openSans(
+                          color: yellowColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700),
+                    ),
                   Row(
                     children: [
                       Expanded(
@@ -85,7 +108,7 @@ class _EventDetailsState extends State<EventDetails> {
                         btnWidth: 110,
                         btnHeight: 40,
                         onPressed: () {
-                           Get.to(() => Ticket(model: widget.model));
+                          Get.to(() => Ticket(model: widget.model));
                         },
                         child: Text(
                           'VIEW TICKET',
@@ -108,7 +131,9 @@ class _EventDetailsState extends State<EventDetails> {
                         width: 0,
                       ),
                       Text(
-                        widget.model.date!,
+                        getStrDate(DateTime.parse(widget.model.date!),
+                                pattern: "dd MMMM, yyyy") ??
+                            '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -156,37 +181,57 @@ class _EventDetailsState extends State<EventDetails> {
                       ),
                       Row(
                         children: [
-                          Column(
-                            children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.favorite_border),
-                                  color: Colors.white),
-                              // Text(
-                              //   'Save',
-                              //   style: GoogleFonts.openSans(
-                              //       color: Colors.white,
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w400),
-                              // ),
-                            ],
+                          SizedBox(
+                            height: 45,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      saveEventItem();
+                                    },
+                                    child: Icon(
+                                      isClicked
+                                          ? Icons.favorite_outlined
+                                          : Icons.favorite_border,
+                                      color:
+                                          isClicked ? logoColor : Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'Save',
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Image.asset(
-                                'assets/images/share.png',
-                                height: 30,
-                                width: 30,
-                              )
-                              // Text(
-                              //   'Share',
-                              //   style: GoogleFonts.openSans(
-                              //       color: Colors.white,
-                              //       fontSize: 12,
-                              //       fontWeight: FontWeight.w400),
-                              // ),
-                            ],
+                          const SizedBox(
+                            width: 25,
+                          ),
+                          SizedBox(
+                            height: 45,
+                            child: Column(
+                              children: [
+                                Image.asset(
+                                  'assets/images/share.png',
+                                  height: 20,
+                                  width: 30,
+                                ),
+                                Text(
+                                  'Share',
+                                  style: GoogleFonts.openSans(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       )

@@ -7,12 +7,12 @@ import 'package:urge/common/widgets/colors.dart';
 
 
 void showSnackBar({ required String content, String? title}) {
-  Get.showSnackbar(
-        GetSnackBar(
-          title: title ?? 'Message',
-          message: content,
-          duration: const Duration(seconds: 3),
-          backgroundColor: appBackgroundColor,
-        ),
-      );
+  Get.snackbar(
+      title ?? 'Message',
+      content,
+  duration: const Duration(seconds: 3),
+  backgroundColor: containerColor,
+  colorText: Colors.white,
+    snackPosition: SnackPosition.TOP
+  );
 }

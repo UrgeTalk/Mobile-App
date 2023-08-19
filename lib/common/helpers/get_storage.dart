@@ -8,6 +8,8 @@ class LocalStorage {
     introdata.writeIfNull("loggedinbefore", false);
     introdata.write("access", '');
     introdata.write("id", '');
+    introdata.write("is_member", '');
+    introdata.write("is_speaker", '');
   }
 
   static getToken() {
@@ -20,6 +22,14 @@ class LocalStorage {
 
   static deleteToken() {
     return GetStorage().remove("access");
+  }
+
+  static getMemberStatus() {
+    return GetStorage().read("is_member");
+  }
+
+  static getSpeakerStatus(){
+    return GetStorage().read("is_speaker");
   }
 
 }

@@ -1,6 +1,8 @@
 import 'package:urge/common/network/app_exception.dart';
 import 'package:urge/common/network/dialog_help.dart';
 
+import '../helpers/utils.dart';
+
 class BaseController {
   void handleError(error) {
     if (error is BadRequestException) {

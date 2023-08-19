@@ -55,8 +55,9 @@ class _MasterClassState extends State<MasterClass> {
                 child: Obx(() {
                   if (_dashboardController.isListLoading.value) {
                     return const Center(child: CircularProgressIndicator());
-                  } else if (_dashboardController.errorMessage.isNotEmpty) {
-                    return const Center(child: Text('An Error Occurred'));
+                  } else if (_dashboardController.newMasterClassList.isEmpty) {
+                    return const Center(child: Text('No Masterclass',
+                    style: TextStyle(color: Colors.white),));
                   } else {
                     return ListView.builder(
                         scrollDirection: Axis.vertical,

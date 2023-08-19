@@ -1,12 +1,10 @@
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:urge/common/helpers/custom_svg.dart';
 import 'package:urge/common/widgets/colors.dart';
-import 'package:urge/features/dashboard/views/member.dart';
-import 'package:urge/features/home/views/home.dart';
-import 'package:urge/features/events/views/events.dart';
-import 'package:urge/features/search/views/search.dart';
 import 'package:urge/features/dashboard/views/dashboard.dart';
+import 'package:urge/features/events/views/events.dart';
+import 'package:urge/features/home/views/home.dart';
+import 'package:urge/features/search/views/search.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);
@@ -19,6 +17,7 @@ class _BottomBarState extends State<BottomBar> {
   int pageIndex = 0;
 
   List<Widget> pages = const [Home(), Events(), Search(), Dashboard()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +38,7 @@ class _BottomBarState extends State<BottomBar> {
         iconSize: 28,
         items: [
           BottomNavigationBarItem(
-            label: 'HOME',
+            label: '',
             icon: Container(
                 width: 42,
                 decoration: BoxDecoration(
@@ -51,7 +50,7 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                 ),
                 child: CustomSvg(
-                  assetName: 'assets/images/home_icon.svg',
+                  assetName: 'assets/images/urge_icon.svg',
                   height: 20,
                   width: 20,
                   color: pageIndex == 0 ? logoColor : Colors.white,

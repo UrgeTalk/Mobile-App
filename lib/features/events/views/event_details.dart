@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import '../model/event_model.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_share/flutter_share.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({Key? key, required this.model}) : super(key: key);
   final Event model;
+
   @override
   State<EventDetailsPage> createState() => _EventDetailsPageState();
 }
@@ -39,6 +43,25 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       _controller.saveEventItem(widget.model);
     } else {
       _controller.saveEventItem(widget.model);
+    }
+  }
+
+  Future<void> shareEventDetails() async {
+    final String shareText = 'Check out this event!\n'
+        'Name: ${widget.model.name}\n'
+        'Date: ${getStrDate(DateTime.parse(widget.model.date!), pattern: "dd MMMM, yyyy")}\n'
+        'Type: ${widget.model.type}\n'
+        'Location: ${widget.model.location}\n';
+
+    try {
+      await FlutterShare.share(
+        title: 'Event Details',
+        text: shareText,
+        linkUrl: widget.model.cover,
+        // Change the mime type according to your image type
+      );
+    } catch (e) {
+      print('Error sharing: $e');
     }
   }
 
@@ -83,13 +106,20 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    capitalizeFirstLetter(widget.model.type!),
-                    style: GoogleFonts.openSans(
-                        color: yellowColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700),
-                  ),
+                  if (widget.model.type == "free")
+                    Text('Free',
+                        style: GoogleFonts.openSans(
+                            color: yellowColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
+                  if (widget.model.type == "paid")
+                    Text(
+                      capitalizeFirstLetter(widget.model.amount.toString()),
+                      style: GoogleFonts.openSans(
+                          color: yellowColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700),
+                    ),
                   Row(
                     children: [
                       Expanded(
@@ -131,7 +161,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         width: 15,
                       ),
                       Text(
-                        widget.model.date!,
+                        getStrDate(DateTime.parse(widget.model.date!),
+                                pattern: "dd MMMM, yyyy") ??
+                            '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,
                             fontSize: 14,
@@ -191,14 +223,15 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                   height: 20,
                                   width: 20,
                                   child: GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       saveEventItem();
                                     },
                                     child: Icon(
                                       isClicked
                                           ? Icons.favorite_outlined
                                           : Icons.favorite_border,
-                                      color: isClicked ? logoColor : Colors.white,
+                                      color:
+                                          isClicked ? logoColor : Colors.white,
                                     ),
                                   ),
                                 ),
@@ -215,23 +248,26 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           const SizedBox(
                             width: 25,
                           ),
-                          SizedBox(
-                            height: 45,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/share.png',
-                                  height: 20,
-                                  width: 30,
-                                ),
-                                Text(
-                                  'Share',
-                                  style: GoogleFonts.openSans(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
+                          GestureDetector(
+                            onTap: shareEventDetails,
+                            child: SizedBox(
+                              height: 45,
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/share.png',
+                                    height: 20,
+                                    width: 30,
+                                  ),
+                                  Text(
+                                    'Share',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],

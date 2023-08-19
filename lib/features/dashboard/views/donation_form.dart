@@ -53,9 +53,11 @@ class _DonationState extends State<Donation> {
                     Expanded(
                       child: CustomTextField(
                         controller: _firstNameController,
+                        hintStyle: const TextStyle(color: Colors.white60),
                         hintText: 'First Name',
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.person_outline),
+                          color: Colors.white,
                           onPressed: () {},
                         ),
                         validator: (value) {
@@ -73,16 +75,18 @@ class _DonationState extends State<Donation> {
                     Expanded(
                       child: CustomTextField(
                           controller: _lastNameController,
+                          hintStyle: const TextStyle(color: Colors.white60),
                           hintText: 'Last Name',
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.person_outline),
+                            color: Colors.white,
                             onPressed: () {},
                           ),
                           validator: (value) {
                             if (value == '') {
                               return null;
                             } else {
-                              return "Field canot be empty";
+                              return "Field cannot be empty";
                             }
                           }),
                     )
@@ -100,7 +104,7 @@ class _DonationState extends State<Donation> {
                     controller: _amountController,
                     decoration: const InputDecoration(
                       hintText: 'Amount',
-                      hintStyle: TextStyle(color: Colors.white, fontSize: 14),
+                      hintStyle: TextStyle(color: Colors.white60, fontSize: 14),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(10.0),
                     ),
@@ -120,7 +124,7 @@ class _DonationState extends State<Donation> {
                     controller: _noteController,
                     decoration: const InputDecoration(
                       hintText: 'Leave a note',
-                      hintStyle: TextStyle(color: Colors.white, fontSize: 14),
+                      hintStyle: TextStyle(color: Colors.white60, fontSize: 14),
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.all(10.0),
                     ),

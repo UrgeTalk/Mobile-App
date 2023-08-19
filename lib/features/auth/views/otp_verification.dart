@@ -129,11 +129,11 @@ class _OTPVerificationState extends State<OTPVerification> {
                 ),
                 onPressed: () {
                   if (_otpPinController.text.length == 4) {
-                            _authController.verifyEmail(
-                              widget.emailAddress,
-                              _otpPinController.text
-                            );
-                          }
+                    _authController.verifyEmail(
+                        widget.emailAddress,
+                        _otpPinController.text
+                    );
+                  }
                 }),
           ],
         ),

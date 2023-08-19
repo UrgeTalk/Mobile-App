@@ -63,8 +63,6 @@ class _SavedVideosState extends State<SavedVideos>
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
-            //Navigator.pop(context);
-           // Get.off(()=> const Home());
             Get.back();
           },
         ),
@@ -78,13 +76,11 @@ class _SavedVideosState extends State<SavedVideos>
                     fontWeight: FontWeight.w800)),
             Row(
               children: [
-                const SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: Icon(
-                    Icons.favorite,
-                    color: Colors.blue,
-                  ),
+                SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: Image.asset('assets/images/blue_saved_icon.png',
+                  height: 25, width: 25,)
                 ),
                 const SizedBox(
                   width: 15,

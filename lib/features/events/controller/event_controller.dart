@@ -85,6 +85,8 @@ class EventController extends GetxController with BaseController {
     _eventService.registerEvent(model.id).then((value) {
       if (value['message'] == "Event registration successful") {
         showSnackBar(content: "Registration Successful!");
+      } else if(value['message']== "Payment is yet to be made"){
+       // showSnackBar(content: "Payment is yet to be made");
       }
     }).catchError((error) {
       isListLoading(false);
@@ -101,25 +103,12 @@ class EventController extends GetxController with BaseController {
       try {
         if (value['message'] == "success") {
           var transList = List<Event>.from(
-              (value['data']['event']).map((x) => Event.fromMap(x)));
+              (value['data']).map((x) => Event.fromMap(x)));
           registeredList.value = transList;
           print(registeredList.length);
           print('Here are some registered events');
           isListLoading(false);
         }
-        // if (value != null && value['message'] == "success") {
-        //   var data = value['data'];
-        //   if (data != null && data is List) {
-        //     var transList =
-        //     List<Event>.from(data.map((x) => Event.fromMap(x)));
-        //     registeredList.value = transList;
-        //     print('Here are some registered events:');
-        //     print(registeredList.length);
-        //   } else {
-        //     print('No events data available.');
-        //   }
-        // }
-
       } catch (error) {
         print(error);
       }

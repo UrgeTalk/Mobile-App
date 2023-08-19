@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
@@ -137,7 +138,8 @@ class _EventsState extends State<Events> {
         } else if (_controller.errorMessage.isNotEmpty) {
           return const Center(child: Text('An Error Occurred'));
         } else if (_controller.newEventList.isEmpty) {
-          return const Center(child: Text('No Event Found'));
+          return const Center(child: Text('No Featured events yet',
+          style: TextStyle(color: Colors.white),));
         } else {
           return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -205,7 +207,9 @@ class _EventsState extends State<Events> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
-                    _model.date!,
+                    getStrDate(DateTime.parse(_model.date!),
+                        pattern: "dd MMMM, yyyy") ??
+                        '',
                     style: GoogleFonts.openSans(
                         color: logoColor,
                         fontSize: 14,
@@ -231,7 +235,7 @@ class _EventsState extends State<Events> {
                           Get.to(() => EventDetailsPage(model: _model));
                         },
                         child: Text(
-                          'INTERESTED',
+                          'REGISTER',
                           style: GoogleFonts.openSans(
                               color: Colors.black,
                               fontWeight: FontWeight.w700,
@@ -290,7 +294,8 @@ class _EventsState extends State<Events> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
+                  child:
+                  Text(
                     capitalizeFirstLetter(_model.type!),
                     style: GoogleFonts.openSans(
                         color: yellowColor,
@@ -344,7 +349,9 @@ class _EventsState extends State<Events> {
                       width: 0,
                     ),
                     Text(
-                      _model.date!,
+                      getStrDate(DateTime.parse(_model.date!),
+                          pattern: "dd MMMM, yyyy") ??
+                          '',
                       style: GoogleFonts.openSans(
                           color: Colors.white,
                           fontSize: 14,
