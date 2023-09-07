@@ -94,8 +94,8 @@ class AuthService with BaseController {
       return await baseClient.post(
           url,
           '/changePassword', {
-        "password": currentPassword,
-        "new_password": newPassword,
+        "new_password": currentPassword,
+        "password": newPassword,
       });
     } catch (error) {
       return Future.error(error);

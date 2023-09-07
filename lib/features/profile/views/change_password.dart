@@ -20,6 +20,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController _currentPasswordController =
       TextEditingController();
   bool obscurePassword = false;
+  bool obscureNewPassword = false;
+  bool obscureConfirmNewPass = false;
   final _formKey = GlobalKey<FormState>();
   final AuthController _authController = Get.put(AuthController());
 
@@ -86,15 +88,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                   hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        obscureNewPassword ? Icons.visibility : Icons.visibility_off,
                         color: Colors.white),
                     onPressed: () {
                       setState(() {
-                        obscurePassword = !obscurePassword;
+                        obscureNewPassword = !obscureNewPassword;
                       });
                     },
                   ),
-                  obscureText: !obscurePassword,
+                  obscureText: !obscureNewPassword,
                   validator: (value) {
                     if (value != '') {
                       return null;
@@ -112,15 +114,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                   hintStyle: const TextStyle(color: Colors.white),
                   suffixIcon: IconButton(
                     icon: Icon(
-                        obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        obscureConfirmNewPass ? Icons.visibility : Icons.visibility_off,
                         color: Colors.white),
                     onPressed: () {
                       setState(() {
-                        obscurePassword = !obscurePassword;
+                        obscureConfirmNewPass = !obscureConfirmNewPass;
                       });
                     },
                   ),
-                  obscureText: !obscurePassword,
+                  obscureText: !obscureConfirmNewPass,
                   validator: (value) {
                     if (value == '') {
                       return "Field cannot be empty";

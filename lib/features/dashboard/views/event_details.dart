@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
 import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
@@ -36,6 +37,25 @@ class _EventDetailsState extends State<EventDetails> {
       _controller.saveEventItem(widget.model);
     } else {
       _controller.saveEventItem(widget.model);
+    }
+  }
+
+  Future<void> shareEventDetails() async {
+    final String shareText = 'Check out this event!\n'
+        'Name: ${widget.model.name}\n'
+        'Date: ${getStrDate(DateTime.parse(widget.model.date!), pattern: "dd MMMM, yyyy")}\n'
+        'Type: ${widget.model.type}\n'
+        'Location: ${widget.model.location}\n';
+
+    try {
+      await FlutterShare.share(
+        title: 'Event Details',
+        text: shareText,
+        linkUrl: "",
+        // Change the mime type according to your image type
+      );
+    } catch (e) {
+      print('Error sharing: $e');
     }
   }
 
@@ -214,23 +234,28 @@ class _EventDetailsState extends State<EventDetails> {
                           const SizedBox(
                             width: 25,
                           ),
-                          SizedBox(
-                            height: 45,
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  'assets/images/share.png',
-                                  height: 20,
-                                  width: 30,
-                                ),
-                                Text(
-                                  'Share',
-                                  style: GoogleFonts.openSans(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                              ],
+                          GestureDetector(
+                            onTap: (){
+                              shareEventDetails();
+                            },
+                            child: SizedBox(
+                              height: 45,
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/share.png',
+                                    height: 20,
+                                    width: 30,
+                                  ),
+                                  Text(
+                                    'Share',
+                                    style: GoogleFonts.openSans(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],

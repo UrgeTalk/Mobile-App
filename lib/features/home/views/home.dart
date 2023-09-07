@@ -30,13 +30,15 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    _authController.getProfile();
-    _homeController.getAllVideos();
-    _homeController.getSavedVideoItems();
-    _homeController.newFeaturedVideos.value = _homeController.featuredVideoItems;
-    _homeController.newRecommendedVideos.value = _homeController.recommendedVideoItems;
-    _homeController.newTrendingVideos.value = _homeController.trendingVideoItems;
-    _homeController.newLatestVideos.value = _homeController.latestVideoItems;
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _authController.getProfile();
+      _homeController.getAllVideos();
+      _homeController.getSavedVideoItems();
+      _homeController.newFeaturedVideos.value = _homeController.featuredVideoItems;
+      _homeController.newRecommendedVideos.value = _homeController.recommendedVideoItems;
+      _homeController.newTrendingVideos.value = _homeController.trendingVideoItems;
+      _homeController.newLatestVideos.value = _homeController.latestVideoItems;
+    });
     super.initState();
   }
 

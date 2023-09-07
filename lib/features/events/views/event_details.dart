@@ -57,7 +57,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
       await FlutterShare.share(
         title: 'Event Details',
         text: shareText,
-        linkUrl: widget.model.cover,
+        linkUrl: "",
         // Change the mime type according to your image type
       );
     } catch (e) {
@@ -210,6 +210,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -246,7 +247,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             ),
                           ),
                           const SizedBox(
-                            width: 25,
+                            width: 10,
                           ),
                           GestureDetector(
                             onTap: shareEventDetails,

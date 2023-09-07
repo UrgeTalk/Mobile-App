@@ -21,7 +21,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
 
   final _formKey = GlobalKey<FormState>();
-  final _profileController = Get.find<ProfileController>();
+  final _profileController = Get.put(ProfileController());
 
   final introdata = GetStorage();
 
@@ -80,60 +80,65 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(
                   height: 20,
                 ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Stack(
+                GestureDetector(
+                  onTap: (){
+                    selectImage();
+                  },
+                  child: Align(
                     alignment: Alignment.center,
-                    children: [
-                      image == null
-                          ? CachedNetworkImage(
-                        imageUrl: _profileController
-                            .profileModel.profilePicture ==
-                            null ||
-                            _profileController
-                                .profileModel.profilePicture ==
-                                ''
-                            ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
-                            : _profileController
-                            .profileModel.profilePicture!,
-                        placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                        const Icon(
-                          Icons.person,
-                          size: 120,
-                        ),
-                        imageBuilder: (context, imageProvider) =>
-                            Container(
-                              width: 120.0,
-                              height: 120.0,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        image == null
+                            ? CachedNetworkImage(
+                          imageUrl: _profileController
+                              .profileModel.profilePicture ==
+                              null ||
+                              _profileController
+                                  .profileModel.profilePicture ==
+                                  ''
+                              ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                              : _profileController
+                              .profileModel.profilePicture!,
+                          placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                          const Icon(
+                            Icons.person,
+                            size: 120,
+                          ),
+                          imageBuilder: (context, imageProvider) =>
+                              Container(
+                                width: 120.0,
+                                height: 120.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover),
+                                ),
                               ),
-                            ),
-                      )
-                          : CircleAvatar(
-                        backgroundImage: FileImage(
-                          image!,
+                        )
+                            : CircleAvatar(
+                          backgroundImage: FileImage(
+                            image!,
+                          ),
+                          radius: 64,
                         ),
-                        radius: 64,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: -15,
-                        child: IconButton(
-                            onPressed: () {
-                              selectImage();
-                            },
-                            icon: Icon(
-                              Icons.camera_alt,
-                              color: logoColor,
-                            )),
-                      ),
-                    ],
+                        Positioned(
+                          bottom: 0,
+                          right: -15,
+                          child: IconButton(
+                              onPressed: () {
+                                selectImage();
+                              },
+                              icon: Icon(
+                                Icons.camera_alt,
+                                color: logoColor,
+                              )),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -175,23 +180,22 @@ class _EditProfileState extends State<EditProfile> {
                 const SizedBox(
                   height: 50,
                 ),
-                Obx(() =>
-                    BtnElevated(
-                      isLoading: _profileController.isLoading.value,
-                        child: Text(
-                          'SAVE',
-                          style: GoogleFonts.openSans(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _profileController.editProfile(
-                                _firstNameController.text,
-                                _lastNameController.text);
-                          }
-                        }),)
+                BtnElevated(
+                    child: Text(
+                      'SAVE',
+                      style: GoogleFonts.openSans(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _profileController.editProfile(
+                            _firstNameController.text,
+                            _lastNameController.text,
+                            image);
+                      }
+                    })
               ],
             ),
           ),
@@ -199,14 +203,28 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
-
+  //
+  // void selectImage() async {
+  //   image = await pickImageFromGallery();
+  //   setState(() {
+  //     //_profileController.uploadImage(image!);
+  //   });
+  //   print(image);
+  //   print(image!.path);
+  //   _profileController.uploadImage(image!);
+  // }
   void selectImage() async {
-    image = await pickImageFromGallery();
+    File? selectedImage = await pickImageFromGallery();
     setState(() {
-      //_profileController.uploadImage(image!);
+      image = selectedImage;
     });
-    print(image);
-    print(image!.path);
-    _profileController.uploadImage(image!);
+
+    if (image != null) {
+      _profileController.editProfile(
+        _firstNameController.text,
+        _lastNameController.text,
+        image,
+      );
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:urge/common/helpers/dialog_box.dart';
 import 'package:urge/common/helpers/utils.dart';
 import 'package:urge/common/network/base_client.dart';
 import 'package:urge/common/network/base_controller.dart';
@@ -10,6 +11,7 @@ import 'package:urge/features/profile/model/profile_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
+import 'package:urge/features/profile/views/profile.dart';
 import 'dart:io';
 import 'dart:convert';
 
@@ -49,12 +51,14 @@ class ProfileController extends GetxController with BaseController {
   }
   void editProfile(
       String firstName,
-      String lastName
+      String lastName,
+      File? image
       ){
-    isLoading(true);
-    _profileService.editProfile(firstName, lastName).then((value){
+    //isLoading(true);
+    _profileService.editProfile(firstName, lastName, image).then((value){
       if(value['status'] == 200){
-        Get.off(()=> const BottomBar());
+        isLoading(false);
+        profileUpdateSuccessful();
       }
     }).catchError((e) {
       isLoading(false);

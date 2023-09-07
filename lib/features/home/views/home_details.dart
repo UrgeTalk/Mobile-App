@@ -67,6 +67,10 @@ class _HomeDetailsState extends State<HomeDetails> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Calculate the aspect ratio based on the screen width
+    double aspectRatio = screenWidth / 1.0;
     return GetBuilder<HomeController>(
         id: 'Details',
         builder: (controller) {
@@ -96,9 +100,9 @@ class _HomeDetailsState extends State<HomeDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      width: double.infinity,
+                     width: double.infinity,
                       child: AspectRatio(
-                        aspectRatio: 15 / 12,
+                        aspectRatio: 16/12,
                         child: Chewie(
                           controller: _chewieController,
                         ),
