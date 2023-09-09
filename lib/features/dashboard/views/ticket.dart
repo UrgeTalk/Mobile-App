@@ -251,31 +251,6 @@ class _TicketState extends State<Ticket> {
               const SizedBox(
                 height: 20,
               ),
-              BtnElevated(
-                  btnWidth: double.infinity,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/download.png',
-                          height: 15,
-                          width: 15,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'DOWNLOAD',
-                          style: GoogleFonts.openSans(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    ),
-                  ),
-                  onPressed: () {})
             ],
           ),
         ),

@@ -67,6 +67,12 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    String locationText = widget.model.location ?? ''; // Ensure it's not null
+    const int maxTextLength = 35; // Set your desired maximum length
+
+    if (locationText.length > maxTextLength) {
+      locationText = locationText.substring(0, maxTextLength) + '...';
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Events Details',
@@ -205,7 +211,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             width: 10,
                           ),
                           Text(
-                            widget.model.location!,
+                            locationText,
                             style: GoogleFonts.openSans(
                                 color: Colors.white,
                                 fontSize: 14,

@@ -59,8 +59,16 @@ class _EventDetailsState extends State<EventDetails> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    String locationText = widget.model.location ?? ''; // Ensure it's not null
+    const int maxTextLength = 35; // Set your desired maximum length
+
+    if (locationText.length > maxTextLength) {
+      locationText = locationText.substring(0, maxTextLength) + '...';
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Registered Events',
@@ -143,16 +151,17 @@ class _EventDetailsState extends State<EventDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.calendar_month),
-                          color: Colors.white),
                       const SizedBox(
-                        width: 0,
+                        height: 20,
+                        width: 20,
+                        child: Icon(Icons.calendar_month, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        width: 15,
                       ),
                       Text(
                         getStrDate(DateTime.parse(widget.model.date!),
-                                pattern: "dd MMMM, yyyy") ??
+                            pattern: "dd MMMM, yyyy") ??
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,
@@ -162,12 +171,13 @@ class _EventDetailsState extends State<EventDetails> {
                       const SizedBox(
                         width: 10,
                       ),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.access_time),
-                          color: Colors.white),
                       const SizedBox(
-                        width: 0,
+                        height: 20,
+                        width: 20,
+                        child: Icon(Icons.access_time, color: Colors.white),
+                      ),
+                      const SizedBox(
+                        width: 10,
                       ),
                       Text(
                         widget.model.time!,
@@ -178,24 +188,30 @@ class _EventDetailsState extends State<EventDetails> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.location_on),
-                              color: Colors.white),
                           const SizedBox(
-                            width: 0,
+                            height: 20,
+                            width: 20,
+                            child: Icon(Icons.location_on, color: Colors.white),
+                          ),
+                          const SizedBox(
+                            width: 10,
                           ),
                           Text(
-                            widget.model.location!,
+                            locationText,
                             style: GoogleFonts.openSans(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
@@ -217,7 +233,7 @@ class _EventDetailsState extends State<EventDetails> {
                                           ? Icons.favorite_outlined
                                           : Icons.favorite_border,
                                       color:
-                                          isClicked ? logoColor : Colors.white,
+                                      isClicked ? logoColor : Colors.white,
                                     ),
                                   ),
                                 ),
@@ -232,12 +248,10 @@ class _EventDetailsState extends State<EventDetails> {
                             ),
                           ),
                           const SizedBox(
-                            width: 25,
+                            width: 10,
                           ),
                           GestureDetector(
-                            onTap: (){
-                              shareEventDetails();
-                            },
+                            onTap: shareEventDetails,
                             child: SizedBox(
                               height: 45,
                               child: Column(
