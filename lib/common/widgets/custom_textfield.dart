@@ -83,7 +83,7 @@ class CustomTextField extends StatefulWidget {
     this.contentPadding,
     this.textAlignVertical,
     this.suffix,
-    this.radius = 5,
+    this.radius = 25,
     this.children,
     this.validator,
     this.hideCounter = false,

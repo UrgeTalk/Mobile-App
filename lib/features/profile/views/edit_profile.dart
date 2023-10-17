@@ -203,16 +203,7 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
-  //
-  // void selectImage() async {
-  //   image = await pickImageFromGallery();
-  //   setState(() {
-  //     //_profileController.uploadImage(image!);
-  //   });
-  //   print(image);
-  //   print(image!.path);
-  //   _profileController.uploadImage(image!);
-  // }
+
   void selectImage() async {
     File? selectedImage = await pickImageFromGallery();
     setState(() {

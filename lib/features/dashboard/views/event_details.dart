@@ -132,9 +132,12 @@ class _EventDetailsState extends State<EventDetails> {
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       )),
+                      const SizedBox(
+                        width: 15,
+                      ),
                       BtnElevated(
                         btnWidth: 110,
-                        btnHeight: 40,
+                        btnHeight: 30,
                         onPressed: () {
                           Get.to(() => Ticket(model: widget.model));
                         },
@@ -147,6 +150,9 @@ class _EventDetailsState extends State<EventDetails> {
                         ),
                       )
                     ],
+                  ),
+                  const SizedBox(
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -165,7 +171,7 @@ class _EventDetailsState extends State<EventDetails> {
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(
@@ -183,7 +189,7 @@ class _EventDetailsState extends State<EventDetails> {
                         widget.model.time!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -195,25 +201,32 @@ class _EventDetailsState extends State<EventDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: Icon(Icons.location_on, color: Colors.white),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            locationText,
-                            style: GoogleFonts.openSans(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: Icon(Icons.location_on, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: Text(
+                                locationText,
+                                style: GoogleFonts.openSans(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 15,
                       ),
                       Row(
                         children: [
@@ -340,6 +353,9 @@ class _EventDetailsState extends State<EventDetails> {
                             fontWeight: FontWeight.w700),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 25,
                   )
                 ],
               ),

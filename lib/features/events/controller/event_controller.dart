@@ -58,6 +58,7 @@ class EventController extends GetxController with BaseController {
           print('is this real?');
           print(savedEvent.length);
           isListLoading(false);
+          update(['event_info']);
         }
       } catch (error) {
         print(error);

@@ -59,7 +59,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _currentPasswordController,
                   hintText: 'Current Password',
-                  hintStyle: const TextStyle(color: Colors.white),
+                  hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscurePassword ? Icons.visibility : Icons.visibility_off,
@@ -85,7 +85,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _newPasswordController,
                   hintText: 'New Password',
-                  hintStyle: const TextStyle(color: Colors.white),
+                  hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscureNewPassword ? Icons.visibility : Icons.visibility_off,
@@ -111,7 +111,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 CustomTextField(
                   controller: _confirmNewPasswordController,
                   hintText: 'Confirm New Password',
-                  hintStyle: const TextStyle(color: Colors.white),
+                  hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                   suffixIcon: IconButton(
                     icon: Icon(
                         obscureConfirmNewPass ? Icons.visibility : Icons.visibility_off,

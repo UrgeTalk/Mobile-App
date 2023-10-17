@@ -90,7 +90,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   height: 40,
                   child: BtnElevated(
                     btnWidth: 100,
-                    btnHeight: 20,
+                    btnHeight: 10,
                     onPressed: () {
                       Get.to(()=> const EditProfile());
                     },
@@ -182,7 +182,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,7 +205,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     ],
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 25,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,7 +262,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     style: GoogleFonts.openSans(
                         color: Colors.white,
                         fontSize: 14,
-                        fontWeight: FontWeight.w700)),
+                        fontWeight: FontWeight.w700),
+                textAlign: TextAlign.center,),
                 const SizedBox(height: 20),
                 Row(
                   children: [

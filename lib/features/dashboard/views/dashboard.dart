@@ -38,24 +38,26 @@ class _DashboardState extends State<Dashboard>
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: appBackgroundColor,
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                _buildTabBar(),
-                Expanded(
-                    child: TabBarView(
-                  controller: _tabController,
-                  children: const [
-                    Member(),
-                    Speaker(),
-                  ],
-                ))
-              ],
-            )));
+        body: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  _buildTabBar(),
+                  Expanded(
+                      child: TabBarView(
+                    controller: _tabController,
+                    children: const [
+                      Member(),
+                      Speaker(),
+                    ],
+                  ))
+                ],
+              )),
+        ));
   }
 
   Widget _buildTabBar() {

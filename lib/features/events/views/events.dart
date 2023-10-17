@@ -1,15 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
 import 'package:urge/features/events/views/event_details.dart';
 import 'package:urge/features/profile/views/profile.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Events extends StatefulWidget {
   const Events({super.key});
@@ -39,94 +40,95 @@ class _EventsState extends State<Events> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: appBackgroundColor,
-          elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Events',
-                  style: GoogleFonts.openSans(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white)),
-              GestureDetector(
-                onTap: () {
-                  Get.to(() => const Profile());
-                },
-                child: CachedNetworkImage(
-                  imageUrl: _authController
-                      .profileModel.profilePicture ==
-                      null ||
-                      _authController
-                          .profileModel.profilePicture ==
-                          ''
-                      ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
-                      : _authController.profileModel.profilePicture!,
-                  placeholder: (context, url) =>
-                  const Center(),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.person,
-                    size: 35,
-                  ),
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 2),
-                      image: DecorationImage(
-                          image: imageProvider, fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        backgroundColor: appBackgroundColor,
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return GetBuilder<EventController>(
+      id: 'event_info',
+        builder: (controller){
+        return Scaffold(
+            appBar: AppBar(
+              backgroundColor: appBackgroundColor,
+              elevation: 0,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('See all upcoming events',
+                  Text('Events',
                       style: GoogleFonts.openSans(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white)),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text('Featured Events',
-                      style: GoogleFonts.openSans(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white)),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  buildFeaturedEvents(),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Upcoming Events',
-                    style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  buildUpcomingEvents(),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const Profile());
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: _authController.profileModel.profilePicture ==
+                          null ||
+                          _authController.profileModel.profilePicture == ''
+                          ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
+                          : _authController.profileModel.profilePicture!,
+                      placeholder: (context, url) => const Center(),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.person,
+                        size: 35,
+                      ),
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: 35,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
-            )));
+            ),
+            backgroundColor: appBackgroundColor,
+            body: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('See all upcoming events',
+                          style: GoogleFonts.openSans(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white)),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text('Featured Events',
+                          style: GoogleFonts.openSans(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white)),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      buildFeaturedEvents(),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Upcoming Events',
+                        style: GoogleFonts.openSans(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      buildUpcomingEvents(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                    ],
+                  ),
+                ))
+        );
+        });
   }
 
   Widget buildFeaturedEvents() {
@@ -134,12 +136,33 @@ class _EventsState extends State<Events> {
       height: 300,
       child: Obx(() {
         if (_controller.isListLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          //return const Center(child: CircularProgressIndicator());
+            return Shimmer.fromColors(
+              baseColor: const Color(0xFFE0E0E0),
+              highlightColor: const Color(0xFFF5F5F5),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 3, // You can adjust this based on the number of shimmer items you want
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                    width: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: containerColor,
+                    ),
+                  );
+                },
+              ),
+            );
         } else if (_controller.errorMessage.isNotEmpty) {
           return const Center(child: Text('An Error Occurred'));
         } else if (_controller.newEventList.isEmpty) {
-          return const Center(child: Text('No Featured events yet',
-          style: TextStyle(color: Colors.white),));
+          return const Center(
+              child: Text(
+            'No Featured events yet',
+            style: TextStyle(color: Colors.white),
+          ));
         } else {
           return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -162,7 +185,8 @@ class _EventsState extends State<Events> {
         } else if (_controller.errorMessage.isNotEmpty) {
           return const Center(child: Text('An Error Occurred'));
         } else if (_controller.newUpcomingList.isEmpty) {
-          return const Center(child: Text(''));
+          return const Center(child: Text('No Upcoming events',
+          style: TextStyle(color: Colors.white, fontSize: 15),));
         } else {
           return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -191,16 +215,16 @@ class _EventsState extends State<Events> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  decoration: BoxDecoration(
+                Hero(tag: _model.cover!,
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                            _model.cover! ?? "",
-                          ),
-                          fit: BoxFit.cover)),
-                  height: 150,
-                ),
+                      child: CachedNetworkImage(
+                        imageUrl: _model.cover! ?? "",
+                        height: 150,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
                 const SizedBox(
                   height: 5,
                 ),
@@ -208,11 +232,11 @@ class _EventsState extends State<Events> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     getStrDate(DateTime.parse(_model.date!),
-                        pattern: "dd MMMM, yyyy") ??
+                            pattern: "dd MMMM, yyyy") ??
                         '',
                     style: GoogleFonts.openSans(
                         color: logoColor,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -294,8 +318,7 @@ class _EventsState extends State<Events> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child:
-                  Text(
+                  child: Text(
                     capitalizeFirstLetter(_model.type!),
                     style: GoogleFonts.openSans(
                         color: yellowColor,
@@ -350,11 +373,11 @@ class _EventsState extends State<Events> {
                     ),
                     Text(
                       getStrDate(DateTime.parse(_model.date!),
-                          pattern: "dd MMMM, yyyy") ??
+                              pattern: "dd MMMM, yyyy") ??
                           '',
                       style: GoogleFonts.openSans(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
@@ -371,7 +394,7 @@ class _EventsState extends State<Events> {
                       _model.time!,
                       style: GoogleFonts.openSans(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 12,
                           fontWeight: FontWeight.w400),
                     ),
                   ],

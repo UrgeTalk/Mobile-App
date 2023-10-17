@@ -46,7 +46,7 @@ class _LoginState extends State<Login> {
                   child: ListView(
                     children: [
                       const SizedBox(
-                        height: 150,
+                        height: 60,
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -89,14 +89,14 @@ class _LoginState extends State<Login> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
-                        height: 20,
+                        height: 40,
                       ),
                       CustomTextField(
                           controller: _emailController,
                           hintText: 'Email Address',
-                          hintStyle: const TextStyle(color: Colors.white),
+                          hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.email_outlined),
+                            icon: const Icon(Icons.email_outlined, size: 20,),
                             color: Colors.white,
                             onPressed: () {},
                           ),
@@ -113,13 +113,14 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                         controller: _passwordController,
                         hintText: 'Password',
-                        hintStyle: const TextStyle(color: Colors.white),
+                        hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                         suffixIcon: IconButton(
                           icon: Icon(
                               obscurePassword
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: Colors.white),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.white,
+                          size: 20,),
                           onPressed: () {
                             setState(() {
                               obscurePassword = !obscurePassword;
@@ -149,7 +150,7 @@ class _LoginState extends State<Login> {
                             style: GoogleFonts.openSans(
                                 color: logoColor,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 14),
+                                fontSize: 12),
                           ),
                         ),
                       ),
@@ -184,15 +185,15 @@ class _LoginState extends State<Login> {
                               text: 'Don\'t have an account?',
                               style: GoogleFonts.openSans(
                                   color: Colors.white,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
                               children: <TextSpan>[
                                 TextSpan(
                                     text: ' Sign up now',
                                     style: GoogleFonts.openSans(
                                         color: logoColor,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 15))
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14))
                               ],
                             ),
                           ),

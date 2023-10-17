@@ -67,11 +67,13 @@ class _ResetPasswordState extends State<ResetPassword> {
               CustomTextField(
                 controller: _passwordController,
                 hintText: 'New Password',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                 suffixIcon: IconButton(
                   icon: Icon(
-                      obscurePassword ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.white),
+                    obscurePassword ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                   onPressed: () {
                     setState(() {
                       obscurePassword = !obscurePassword;
@@ -93,11 +95,15 @@ class _ResetPasswordState extends State<ResetPassword> {
               CustomTextField(
                 controller: _confirmPasswordController,
                 hintText: 'Confirm New Password',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                 suffixIcon: IconButton(
                   icon: Icon(
-                      obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.white),
+                    obscureConfirmPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                   onPressed: () {
                     setState(() {
                       obscureConfirmPassword = !obscureConfirmPassword;
@@ -109,7 +115,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                   if (value == '') {
                     return "Please enter your password again";
                   } else {
-                    if (_passwordController.text == _confirmPasswordController.text) {
+                    if (_passwordController.text ==
+                        _confirmPasswordController.text) {
                       return null;
                     } else {
                       return 'Password do not match';

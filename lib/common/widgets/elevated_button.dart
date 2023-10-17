@@ -13,7 +13,7 @@ class BtnElevated extends StatelessWidget {
   const BtnElevated(
       {Key? key,
       required this.child,
-      this.btnHeight = 55,
+      this.btnHeight = 45,
       this.useFlexibleWith = false,
       this.btnRadius = 25,
       this.btnWidth = double.infinity,

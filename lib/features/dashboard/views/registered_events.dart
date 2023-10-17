@@ -7,6 +7,7 @@ import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/dashboard/views/event_details.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RegisteredEvents extends StatefulWidget {
   const RegisteredEvents({super.key});
@@ -64,30 +65,7 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                     height: 5,
                   ),
                   buildPastEvents(),
-                  // Expanded(
-                  //   child: SizedBox(
-                  //     height: 250,
-                  //     child: Obx(() {
-                  //       if (_controller.isListLoading.value) {
-                  //         return const Center(child: CircularProgressIndicator());
-                  //       } else if (_controller.errorMessage.isNotEmpty) {
-                  //         return const Center(child: Text('An Error Occurred'));
-                  //       } else if (_controller.registeredList.isEmpty) {
-                  //         return const Center(child: Text('No Event',
-                  //         style: TextStyle(color: Colors.white),));
-                  //       } else {
-                  //         return ListView.builder(
-                  //             scrollDirection: Axis.horizontal,
-                  //             itemCount: _controller.registeredList.length,
-                  //             itemBuilder: ((context, index) {
-                  //               Event _model = _controller.registeredList[index];
-                  //               return pastEvents(_model);
-                  //             }));
-                  //       }
-                  //     }),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 45),
                   Text(
                     'Upcoming Events',
                     style: GoogleFonts.openSans(
@@ -99,27 +77,8 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                     height: 10,
                   ),
                   buildPastEvents(),
-                  // Expanded(
-                  //   child: Obx(() {
-                  //     if (_controller.isListLoading.value) {
-                  //       return const Center(child: Center());
-                  //     } else if (_controller.errorMessage.isNotEmpty) {
-                  //       return const Center(child: Text('An Error Occurred'));
-                  //     } else if (_controller.registeredList.isEmpty) {
-                  //       return const Center(child: Text(''));
-                  //     } else {
-                  //       return ListView.builder(
-                  //           scrollDirection: Axis.horizontal,
-                  //           itemCount: _controller.registeredList.length,
-                  //           itemBuilder: ((context, index) {
-                  //             Event _model = _controller.registeredList[index];
-                  //             return pastEvents(_model);
-                  //           }));
-                  //     }
-                  //   }),
-                  // ),
                   const SizedBox(
-                    height: 10,
+                    height: 20,
                   )
                 ],
               ),
@@ -132,11 +91,13 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
       height: 280,
       child: Obx(() {
         if (_controller.isListLoading.value) {
-          return const Center(child: Center());
+          //return const Center(child: Center());
+          return ShimmerLoadingList();
         } else if (_controller.errorMessage.isNotEmpty) {
           return const Center(child: Text('An Error Occurred'));
         } else if (_controller.registeredList.isEmpty) {
-          return const Center(child: Text(''));
+          return const Center(child: Text('No Events',
+          style: TextStyle(color: Colors.white, fontSize: 16),));
         } else {
           return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -186,7 +147,7 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                         '',
                     style: GoogleFonts.openSans(
                         color: logoColor,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -199,12 +160,15 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                         _model.name!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w700),
                       )),
+                      const SizedBox(
+                        width: 15,
+                      ),
                       BtnElevated(
                         btnWidth: 110,
-                        btnHeight: 40,
+                        btnHeight: 35,
                         onPressed: () {
                           Get.to(() => EventDetails(model: _model));
                         },
@@ -234,6 +198,77 @@ class _RegisteredEventsState extends State<RegisteredEvents> {
                 )
               ],
             )),
+      ),
+    );
+  }
+}
+
+class ShimmerLoadingList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFFE0E0E0),
+      highlightColor: const Color(0xFFF5F5F5),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5, // You can adjust this based on the number of shimmer items you want
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: containerColor, // Set your shimmer background color here
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 10,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

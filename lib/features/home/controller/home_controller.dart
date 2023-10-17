@@ -82,6 +82,7 @@ class HomeController extends GetxController with BaseController {
           print('Here');
           print(trendingVideos.length);
           isListLoading(false);
+          update(['search']);
         }
       } catch (error) {
         print(error);

@@ -1,19 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:urge/common/widgets/custom_textfield.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
-import 'package:urge/features/home/views/home.dart';
+import 'package:urge/features/home/model/home_model.dart';
 import 'package:urge/features/home/views/home_details.dart';
 import 'package:urge/features/profile/controller/profile_controller.dart';
 import 'package:urge/features/profile/views/profile.dart';
-import 'package:urge/common/helpers/date_util.dart';
-import 'package:urge/features/home/model/home_model.dart';
 
 class TrendingVideos extends StatefulWidget {
   const TrendingVideos({super.key});
@@ -65,16 +62,12 @@ class _TrendingVideosState extends State<TrendingVideos> {
                       Get.to(() => const Profile());
                     },
                     child: CachedNetworkImage(
-                      imageUrl: _authController
-                          .profileModel.profilePicture ==
-                          null ||
-                          _authController
-                              .profileModel.profilePicture ==
-                              ''
+                      imageUrl: _authController.profileModel.profilePicture ==
+                                  null ||
+                              _authController.profileModel.profilePicture == ''
                           ? "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/"
                           : _authController.profileModel.profilePicture!,
-                      placeholder: (context, url) =>
-                      const Center(),
+                      placeholder: (context, url) => const Center(),
                       errorWidget: (context, url, error) => const Icon(
                         Icons.person,
                         size: 35,
@@ -105,7 +98,8 @@ class _TrendingVideosState extends State<TrendingVideos> {
                   Expanded(
                     child: Obx(() {
                       if (_homeController.isListLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
+                        return ShimmerLoadingList();
+                        //return const Center(child: CircularProgressIndicator());
                       } else if (_homeController.errorMessage.isNotEmpty) {
                         return const Center(child: Text('An Error Occurred'));
                       } else {
@@ -139,15 +133,17 @@ class _TrendingVideosState extends State<TrendingVideos> {
             children: [
               Row(
                 children: [
-                  Container(
-                    height: 100,
-                    width: 150,
-                    decoration: BoxDecoration(
+                  Hero(
+                      tag: _model.coverImage!,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        image: DecorationImage(
-                            image: NetworkImage(_model.coverImage! ?? ""),
-                            fit: BoxFit.cover)),
-                  ),
+                        child: CachedNetworkImage(
+                          imageUrl: _model.coverImage! ?? "",
+                          height: 100,
+                          width: 150,
+                          fit: BoxFit.cover,
+                        ),
+                      )),
                   const SizedBox(
                     width: 10,
                   ),
@@ -194,6 +190,82 @@ class _TrendingVideosState extends State<TrendingVideos> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ShimmerLoadingList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFFE0E0E0),
+      highlightColor: const Color(0xFFF5F5F5),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: 5,
+        // You can adjust this based on the number of shimmer items you want
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: 150,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color:
+                        containerColor, // Set your shimmer background color here
+                  ),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 10,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color:
+                              containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color:
+                              containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        height: 10,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color:
+                              containerColor, // Set your shimmer background color here
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }

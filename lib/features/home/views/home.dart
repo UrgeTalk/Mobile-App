@@ -11,6 +11,7 @@ import 'package:urge/features/home/views/recommended_videos.dart';
 import 'package:urge/features/home/views/saved_videos.dart';
 import 'package:urge/features/home/views/trending_videos.dart';
 import 'package:urge/features/profile/views/profile.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../auth/controller/auth_controller.dart';
 
@@ -222,7 +223,7 @@ class _HomeState extends State<Home> {
                     ),
                     buildTrendingVideos(),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
                   ],
                 ),
@@ -236,7 +237,18 @@ class _HomeState extends State<Home> {
         height: 250,
         child: Obx(() {
           if (_homeController.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            //return const Center(child: CircularProgressIndicator());
+            return Shimmer.fromColors(
+              baseColor: const Color(0xFFE0E0E0), // You can customize the colors
+              highlightColor: const Color(0xFFF5F5F5),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return ShimmerVideoPlaceholder();
+                },
+              ),
+            );
           } else if (_homeController.newFeaturedVideos.isEmpty) {
             return Center(child: Text('No Featured videos yet', style: TextStyle(color: Colors.white),));
           } else {
@@ -322,15 +334,16 @@ class _HomeState extends State<Home> {
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: NetworkImage(video.coverImage! ?? ""),
-                      fit: BoxFit.cover)),
-              width: 300,
-              height: 180,
-            ),
+                Hero(tag: video.coverImage!,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: video.coverImage! ?? "",
+                        height: 180,
+                        width: 300,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
             const SizedBox(
               height: 10,
             ),
@@ -359,6 +372,17 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  Widget ShimmerVideoPlaceholder() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      width: 300,
+      height: 250,
+      decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
 
   Widget featured(HomeModel video) {
     return GestureDetector(
@@ -370,15 +394,16 @@ class _HomeState extends State<Home> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
+            Hero(tag: video.coverImage!,
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: NetworkImage(video.coverImage! ?? ""),
-                      fit: BoxFit.cover)),
-              width: 300,
-              height: 180,
-            ),
+                  child: CachedNetworkImage(
+                    imageUrl: video.coverImage! ?? "",
+                    height: 180,
+                    width: 300,
+                    fit: BoxFit.cover,
+                  ),
+                )),
             const SizedBox(
               height: 10,
             ),
@@ -420,15 +445,16 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                decoration: BoxDecoration(
+              Hero(tag: video.coverImage!,
+                  child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                        image: NetworkImage(video.coverImage! ?? ""),
-                        fit: BoxFit.cover)),
-                width: 300,
-                height: 180,
-              ),
+                    child: CachedNetworkImage(
+                      imageUrl: video.coverImage! ?? "",
+                      height: 180,
+                      width: 300,
+                      fit: BoxFit.cover,
+                    ),
+                  )),
               const SizedBox(
                 height: 10,
               ),
@@ -469,16 +495,18 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                      image: NetworkImage(video.coverImage! ?? ""),
-                      fit: BoxFit.cover)),
-              height: 180,
-              width: 300,
-            ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Hero(tag: video.coverImage!,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            imageUrl: video.coverImage! ?? "",
+                            height: 180,
+                            width: 300,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
             const SizedBox(
               height: 10,
             ),

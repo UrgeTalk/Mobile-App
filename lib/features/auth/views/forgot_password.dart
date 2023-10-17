@@ -36,7 +36,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           key: _formKey,
           child: Column(children: [
             const SizedBox(
-              height: 60,
+              height: 40,
             ),
             Text(
               'Forgot Password',
@@ -52,7 +52,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Text(
               'Enter your registered Email Address below to retrieve your password.',
               style: GoogleFonts.openSans(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: Colors.white),
               textAlign: TextAlign.center,
@@ -63,9 +63,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             CustomTextField(
                 controller: _emailController,
                 hintText: 'Email Address',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.email_outlined),
+                  icon: const Icon(Icons.email_outlined, size: 20,),
                   color: Colors.white,
                   onPressed: () {},
                 ),

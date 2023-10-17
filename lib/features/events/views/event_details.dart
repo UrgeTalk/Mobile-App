@@ -1,14 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/helpers/date_util.dart';
+import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
-import 'package:urge/common/widgets/colors.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:urge/features/home/controller/home_controller.dart';
+
 import '../model/event_model.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_share/flutter_share.dart';
 
 class EventDetailsPage extends StatefulWidget {
   const EventDetailsPage({Key? key, required this.model}) : super(key: key);
@@ -100,17 +100,28 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 250,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
+                  Hero(
+                      tag: widget.model.cover!,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                            image: NetworkImage(widget.model.cover!),
-                            fit: BoxFit.cover)),
-                  ),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.model.cover ?? "",
+                          height: 250,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      )),
+                  // Container(
+                  //   height: 250,
+                  //   width: double.infinity,
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       image: DecorationImage(
+                  //           image: NetworkImage(widget.model.cover!),
+                  //           fit: BoxFit.cover)),
+                  // ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   if (widget.model.type == "free")
                     Text('Free',
@@ -136,6 +147,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             fontSize: 14,
                             fontWeight: FontWeight.w700),
                       )),
+                      const SizedBox(
+                        width: 15,
+                      ),
                       BtnElevated(
                         btnWidth: 100,
                         btnHeight: 35,
@@ -172,7 +186,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             '',
                         style: GoogleFonts.openSans(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
                       const SizedBox(
@@ -190,7 +204,7 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                         widget.model.time!,
                         style: GoogleFonts.openSans(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -200,25 +214,30 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: Icon(Icons.location_on, color: Colors.white),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            locationText,
-                            style: GoogleFonts.openSans(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child:
+                                  Icon(Icons.location_on, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: Text(
+                                locationText,
+                                style: GoogleFonts.openSans(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Row(
                         children: [
@@ -342,6 +361,9 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             fontWeight: FontWeight.w700),
                       ),
                     ],
+                  ),
+                  const SizedBox(
+                    height: 30,
                   )
                 ],
               ),

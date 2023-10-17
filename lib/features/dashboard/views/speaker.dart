@@ -98,6 +98,9 @@ class _SpeakerState extends State<Speaker> {
             child: SafeArea(
               child: ListView(
                 children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
                   Align(
                     alignment: Alignment.topRight,
                     child: Container(
@@ -189,7 +192,7 @@ class _SpeakerState extends State<Speaker> {
                                           color: Colors.black,
                                           fontFamily: "OpenSans",
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 16),
+                                          fontSize: 12),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),

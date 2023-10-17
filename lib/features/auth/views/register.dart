@@ -49,7 +49,7 @@ class _RegisterState extends State<Register> {
               child: ListView(
             children: [
               const SizedBox(
-                height: 70,
+                height: 50,
               ),
               Align(
                 alignment: Alignment.center,
@@ -100,9 +100,9 @@ class _RegisterState extends State<Register> {
                     child: CustomTextField(
                       controller: _firstNameController,
                       hintText: 'First Name',
-                      hintStyle: const TextStyle(color: Colors.white),
+                      hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.person_outline),
+                        icon: const Icon(Icons.person_outline, size: 20,),
                         color: Colors.white,
                         onPressed: () {},
                       ),
@@ -120,9 +120,9 @@ class _RegisterState extends State<Register> {
                     child: CustomTextField(
                       controller: _lastNameController,
                       hintText: 'Last Name',
-                      hintStyle: const TextStyle(color: Colors.white),
+                      hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.person_outline),
+                        icon: const Icon(Icons.person_outline, size: 20,),
                         color: Colors.white,
                         onPressed: () {},
                       ),
@@ -143,9 +143,9 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                   controller: _emailController,
                   hintText: 'Email Address',
-                  hintStyle: const TextStyle(color: Colors.white),
+                  hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.person_outline),
+                    icon: const Icon(Icons.person_outline, size: 20,),
                     color: Colors.white,
                     onPressed: () {},
                   ),
@@ -166,9 +166,9 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                 controller: _passwordController,
                 hintText: 'Password',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.remove_red_eye),
+                  icon: const Icon(Icons.remove_red_eye, size: 20,),
                   color: Colors.white,
                   onPressed: () {
                     setState(() {
@@ -191,9 +191,9 @@ class _RegisterState extends State<Register> {
               CustomTextField(
                 controller: _confirmPasswordController,
                 hintText: 'Confirm Password',
-                hintStyle: const TextStyle(color: Colors.white),
+                hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.remove_red_eye),
+                  icon: const Icon(Icons.remove_red_eye, size: 20,),
                   color: Colors.white,
                   onPressed: () {
                     setState(() {
@@ -247,20 +247,23 @@ class _RegisterState extends State<Register> {
                       text: 'Already have an account?',
                       style: GoogleFonts.openSans(
                           color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600),
                       children: <TextSpan>[
                         TextSpan(
                             text: ' Login',
                             style: GoogleFonts.openSans(
                                 color: logoColor,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15))
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14))
                       ],
                     ),
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 30,
+              )
             ],
           )),
         ),

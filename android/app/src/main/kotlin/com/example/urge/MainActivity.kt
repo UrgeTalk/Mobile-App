@@ -1,4 +1,4 @@
-package com.example.urge
+package com.urgetalks.urge_app
 
 import io.flutter.embedding.android.FlutterActivity
 

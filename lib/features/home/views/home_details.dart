@@ -9,6 +9,7 @@ import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import 'package:urge/features/home/model/home_model.dart';
 import 'package:video_player/video_player.dart';
+import 'package:better_player/better_player.dart';
 
 class HomeDetails extends StatefulWidget {
   const HomeDetails({super.key, required this.model});
@@ -101,13 +102,19 @@ class _HomeDetailsState extends State<HomeDetails> {
                   children: [
                     Container(
                      width: double.infinity,
-                      child: AspectRatio(
-                        aspectRatio: 16/12,
-                        child: Chewie(
-                          controller: _chewieController,
-                        ),
+                      height: 300,
+                      child: Chewie(
+                        controller: _chewieController,
                       ),
                     ),
+                    // BetterPlayer.network(
+                    //   widget.model.video!,
+                    //   betterPlayerConfiguration:const BetterPlayerConfiguration(
+                    //     autoPlay: true,
+                    //     fit: BoxFit.cover,
+                    //     looping: true,
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 10,
                     ),

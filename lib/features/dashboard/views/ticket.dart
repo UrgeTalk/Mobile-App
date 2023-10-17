@@ -46,7 +46,7 @@ class _TicketState extends State<Ticket> {
       backgroundColor: appBackgroundColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(15),
           child: Column(
             children: [
               Container(
@@ -189,7 +189,7 @@ class _TicketState extends State<Ticket> {
                                 widget.model.location!,
                                 style: GoogleFonts.openSans(
                                     color: Colors.white,
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600),
                               )
                             ],
@@ -236,12 +236,12 @@ class _TicketState extends State<Ticket> {
                           const SizedBox(
                             height: 30,
                           ),
-                          Center(
-                              child: Image.asset(
-                            'assets/images/scan.png',
-                            height: 150,
-                            width: 150,
-                          ))
+                          // Center(
+                          //     child: Image.asset(
+                          //   'assets/images/scan.png',
+                          //   height: 150,
+                          //   width: 150,
+                          // ))
                         ],
                       ),
                     )
