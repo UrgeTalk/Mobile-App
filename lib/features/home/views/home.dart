@@ -13,6 +13,8 @@ import 'package:urge/features/home/views/trending_videos.dart';
 import 'package:urge/features/profile/views/profile.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../common/helpers/snack_bar.dart';
+import '../../../common/widgets/elevated_button.dart';
 import '../../auth/controller/auth_controller.dart';
 
 class Home extends StatefulWidget {
@@ -144,9 +146,12 @@ class _HomeState extends State<Home> {
                             fontWeight: FontWeight.w700,
                             color: Colors.white)),
                     const SizedBox(
-                      height: 5,
+                      height: 10,
                     ),
                     buildFeaturedVideos(),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -234,33 +239,68 @@ class _HomeState extends State<Home> {
 
   Widget buildFeaturedVideos() {
     return SizedBox(
-        height: 250,
-        child: Obx(() {
-          if (_homeController.isLoading.value) {
-            //return const Center(child: CircularProgressIndicator());
-            return Shimmer.fromColors(
-              baseColor: const Color(0xFFE0E0E0), // You can customize the colors
-              highlightColor: const Color(0xFFF5F5F5),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return ShimmerVideoPlaceholder();
-                },
+        height: 100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+           const Align(
+             alignment: Alignment.center,
+             child: Text('URGE LOLZ 2024 APPLICATION',
+             style: TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w500),),
+           ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Align(
+                child: Text('Stand a challenge to win N300,000 when you send \na short video of your jokes.',
+                  style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),),
               ),
-            );
-          } else if (_homeController.newFeaturedVideos.isEmpty) {
-            return Center(child: Text('No Featured videos yet', style: TextStyle(color: Colors.white),));
-          } else {
-            return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _homeController.newFeaturedVideos.length,
-                itemBuilder: ((context, index) {
-                  HomeModel video = _homeController.newFeaturedVideos[index];
-                  return featured(video);
-                }));
-          }
-        }));
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            BtnElevated(
+              btnWidth: 150,
+              btnHeight: 30,
+              onPressed: () {
+                UrgeSnackBar.launchURL(Get.context!, "https://urgetalks.com/competition");
+              },
+              child: Text(
+                'APPLY NOW',
+                style: GoogleFonts.openSans(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14),
+              ),
+            ),
+          ],
+        )
+        // Obx(() {
+        //   if (_homeController.isLoading.value) {
+        //     //return const Center(child: CircularProgressIndicator());
+        //     return Shimmer.fromColors(
+        //       baseColor: const Color(0xFFE0E0E0), // You can customize the colors
+        //       highlightColor: const Color(0xFFF5F5F5),
+        //       child: ListView.builder(
+        //         scrollDirection: Axis.horizontal,
+        //         itemCount: 3,
+        //         itemBuilder: (context, index) {
+        //           return ShimmerVideoPlaceholder();
+        //         },
+        //       ),
+        //     );
+        //   } else if (_homeController.newFeaturedVideos.isEmpty) {
+        //     return Center(child: Text('No Featured videos yet', style: TextStyle(color: Colors.white),));
+        //   } else {
+        //     return ListView.builder(
+        //         scrollDirection: Axis.horizontal,
+        //         itemCount: _homeController.newFeaturedVideos.length,
+        //         itemBuilder: ((context, index) {
+        //           HomeModel video = _homeController.newFeaturedVideos[index];
+        //           return featured(video);
+        //         }));
+        //   }
+        // })
+    );
   }
 
   Widget buildRecommendedVideos() {
