@@ -7,7 +7,10 @@ import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
-
+import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart'as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import '../model/event_model.dart';
 
 class EventDetailsPage extends StatefulWidget {
@@ -46,32 +49,19 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
     }
   }
 
-  Future<void> shareEventDetails() async {
+
+  @override
+  Widget build(BuildContext context) {
+    String locationText = widget.model.location ?? ''; // Ensure it's not null
+    const int maxTextLength = 35; // Set your desired maximum length
     final String shareText = 'Check out this event!\n'
         'Name: ${widget.model.name}\n'
         'Date: ${getStrDate(DateTime.parse(widget.model.date!), pattern: "dd MMMM, yyyy")}\n'
         'Type: ${widget.model.type}\n'
         'Location: ${widget.model.location}\n';
 
-    try {
-      await FlutterShare.share(
-        title: 'Event Details',
-        text: shareText,
-        linkUrl: "",
-        // Change the mime type according to your image type
-      );
-    } catch (e) {
-      print('Error sharing: $e');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String locationText = widget.model.location ?? ''; // Ensure it's not null
-    const int maxTextLength = 35; // Set your desired maximum length
-
     if (locationText.length > maxTextLength) {
-      locationText = locationText.substring(0, maxTextLength) + '...';
+      locationText = '${locationText.substring(0, maxTextLength)}...';
     }
     return Scaffold(
       appBar: AppBar(
@@ -111,15 +101,6 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                           fit: BoxFit.cover,
                         ),
                       )),
-                  // Container(
-                  //   height: 250,
-                  //   width: double.infinity,
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       image: DecorationImage(
-                  //           image: NetworkImage(widget.model.cover!),
-                  //           fit: BoxFit.cover)),
-                  // ),
                   const SizedBox(
                     height: 12,
                   ),
@@ -275,7 +256,17 @@ class _EventDetailsPageState extends State<EventDetailsPage> {
                             width: 10,
                           ),
                           GestureDetector(
-                            onTap: shareEventDetails,
+                            onTap: () async {
+                              final urlImage = widget.model.cover;
+                              final url = Uri.parse(urlImage!);
+                              final response = await http.get(url);
+                              final bytes = response.bodyBytes;
+                              final temp = await getTemporaryDirectory();
+                              final file = File('${temp.path}/image.jpg');
+                              await file.writeAsBytes(bytes);
+                              final filePath = file.path;
+                              await Share.shareFiles([filePath], text: shareText);
+                            },
                             child: SizedBox(
                               height: 45,
                               child: Column(

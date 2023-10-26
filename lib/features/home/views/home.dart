@@ -373,17 +373,32 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Hero(tag: video.coverImage!,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: video.coverImage! ?? "",
-                        height: 180,
-                        width: 300,
-                        fit: BoxFit.cover,
+              Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    )),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: video.coverImage! ?? "",
+                          height: 180,
+                          width: 300,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    ),
+                // Hero(tag: video.coverImage!,
+                //     child: ClipRRect(
+                //       borderRadius: BorderRadius.circular(10),
+                //       child: CachedNetworkImage(
+                //         imageUrl: video.coverImage! ?? "",
+                //         height: 180,
+                //         width: 300,
+                //         fit: BoxFit.cover,
+                //       ),
+                //     )),
             const SizedBox(
               height: 10,
             ),

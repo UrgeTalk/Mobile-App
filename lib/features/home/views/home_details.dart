@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:chewie/chewie.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +9,6 @@ import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import 'package:urge/features/home/model/home_model.dart';
 import 'package:video_player/video_player.dart';
-import 'package:better_player/better_player.dart';
 
 class HomeDetails extends StatefulWidget {
   const HomeDetails({super.key, required this.model});
@@ -21,31 +20,27 @@ class HomeDetails extends StatefulWidget {
 }
 
 class _HomeDetailsState extends State<HomeDetails> {
-  late ChewieController _chewieController;
-  late VideoPlayerController _videoPlayerController;
 
   final HomeController _homeController = Get.put(HomeController());
 
+  late final FlickManager flickManager;
+
   bool isClicked = false;
   bool isLiked = false;
+  bool isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _videoPlayerController =
-        VideoPlayerController.network(widget.model.video! ?? "");
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoInitialize: true,
-      looping: false,
-    );
+    flickManager = FlickManager(
+        videoPlayerController:
+            VideoPlayerController.network(widget.model.video! ?? ""));
   }
 
   @override
   void dispose() {
-    _chewieController.dispose();
-    _videoPlayerController.dispose();
     super.dispose();
+    flickManager.dispose();
   }
 
   void saveVideoItem() {
@@ -101,20 +96,11 @@ class _HomeDetailsState extends State<HomeDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                     width: double.infinity,
-                      height: 300,
-                      child: Chewie(
-                        controller: _chewieController,
+                      width: MediaQuery.of(context).size.width,
+                      child: FlickVideoPlayer(
+                        flickManager: flickManager,
                       ),
                     ),
-                    // BetterPlayer.network(
-                    //   widget.model.video!,
-                    //   betterPlayerConfiguration:const BetterPlayerConfiguration(
-                    //     autoPlay: true,
-                    //     fit: BoxFit.cover,
-                    //     looping: true,
-                    //   ),
-                    // ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -352,13 +338,6 @@ class _HomeDetailsState extends State<HomeDetails> {
                           const SizedBox(
                             height: 10,
                           ),
-                          // Text(
-                          //   'Comments',
-                          //   style: GoogleFonts.openSans(
-                          //       color: logoColor,
-                          //       fontSize: 14,
-                          //       fontWeight: FontWeight.w700),
-                          // ),
                         ],
                       ),
                     )
@@ -366,41 +345,6 @@ class _HomeDetailsState extends State<HomeDetails> {
                 ),
               ),
             ),
-            // bottomNavigationBar: Container(
-            //     decoration: BoxDecoration(
-            //         borderRadius: BorderRadius.circular(20),
-            //         color: containerColor
-            //     ),
-            //     child: const Row(
-            //       children: [
-            //         Expanded(
-            //           child: Padding(
-            //             padding: EdgeInsets.symmetric(horizontal: 15),
-            //             child: TextField(
-            //               decoration: InputDecoration(
-            //                   border: InputBorder.none,
-            //                   focusedBorder: OutlineInputBorder(
-            //                     borderSide: BorderSide.none,
-            //                   ),
-            //                   fillColor: Colors.white,
-            //                   hintText: 'Search',
-            //                   hintStyle: TextStyle(
-            //                       color: Colors.grey,
-            //                       fontSize: 14,
-            //                       fontWeight: FontWeight.w400)),
-            //             ),
-            //           ),
-            //         ),
-            //         Padding(
-            //           padding: EdgeInsets.all(8.0),
-            //           child: Icon(
-            //             Icons.search,
-            //             color: Colors.white,
-            //           ),
-            //         ),
-            //
-            //       ],
-            //     )),
           );
         });
   }

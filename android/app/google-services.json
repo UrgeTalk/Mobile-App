@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "79921888734",
+    "project_id": "urgetalks-90e71",
+    "storage_bucket": "urgetalks-90e71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:79921888734:android:9f6a646d374d9b469ab14f",
+        "android_client_info": {
+          "package_name": "com.urgetalks.urge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDvqucujCeWwM50oFZFNcF-0T2WlbfpGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

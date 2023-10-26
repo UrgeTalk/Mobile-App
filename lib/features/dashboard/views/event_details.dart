@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,10 @@ import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/dashboard/views/ticket.dart';
 import 'package:urge/features/events/controller/event_controller.dart';
 import 'package:urge/features/events/model/event_model.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:http/http.dart'as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 class EventDetails extends StatefulWidget {
   const EventDetails({super.key, required this.model});
@@ -21,6 +26,7 @@ class EventDetails extends StatefulWidget {
 class _EventDetailsState extends State<EventDetails> {
   final EventController _controller = Get.put(EventController());
   bool isClicked = false;
+
 
   String capitalizeFirstLetter(String text) {
     if (text.isEmpty) {
@@ -68,6 +74,10 @@ class _EventDetailsState extends State<EventDetails> {
     if (locationText.length > maxTextLength) {
       locationText = locationText.substring(0, maxTextLength) + '...';
     }
+    final String shareText = 'Check out this event!\n'
+        'Event Name: ${widget.model.name}\n'
+        'Date: ${getStrDate(DateTime.parse(widget.model.date!), pattern: "dd MMMM, yyyy")}\n'
+        'Location: ${widget.model.location}\n';
 
     return Scaffold(
       appBar: AppBar(
@@ -264,7 +274,17 @@ class _EventDetailsState extends State<EventDetails> {
                             width: 10,
                           ),
                           GestureDetector(
-                            onTap: shareEventDetails,
+                            onTap: () async {
+                            final urlImage = widget.model.cover;
+                            final url = Uri.parse(urlImage!);
+                            final response = await http.get(url);
+                            final bytes = response.bodyBytes;
+                            final temp = await getTemporaryDirectory();
+                            final file = File('${temp.path}/image.jpg');
+                            await file.writeAsBytes(bytes);
+                            final filePath = file.path;
+                            await Share.shareFiles([filePath], text: shareText);
+                            },
                             child: SizedBox(
                               height: 45,
                               child: Column(

@@ -1,9 +1,13 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:urge/common/helpers/binding.dart';
 import 'features/splash/splash.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 
 Future<void> main() async {
@@ -14,6 +18,17 @@ Future<void> main() async {
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+  // All uncaught asynchronous errors that are not handled by Flutter framework
+  PlatformDispatcher.instance.onError = (error, stack){
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
   runApp(const MyApp());
 }
 
