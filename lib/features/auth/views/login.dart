@@ -1,16 +1,13 @@
+import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
-import 'package:urge/common/widgets/bottom_nav.dart';
-import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:urge/common/widgets/custom_button.dart';
-import 'package:urge/common/widgets/elevated_button.dart';
+import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/custom_textfield.dart';
+import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
 import 'package:urge/features/auth/views/forgot_password.dart';
 import 'package:urge/features/auth/views/register.dart';
-import 'package:urge/common/helpers/dialog_box.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -94,14 +91,18 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                           controller: _emailController,
                           hintText: 'Email Address',
-                          hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
+                          hintStyle: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.email_outlined, size: 20,),
+                            icon: const Icon(
+                              Icons.email_outlined,
+                              size: 20,
+                            ),
                             color: Colors.white,
                             onPressed: () {},
                           ),
                           validator: (value) {
-                            if (value!= '') {
+                            if (value != '') {
                               return null;
                             } else {
                               return 'Field cannot be empty';
@@ -113,14 +114,16 @@ class _LoginState extends State<Login> {
                       CustomTextField(
                         controller: _passwordController,
                         hintText: 'Password',
-                        hintStyle: const TextStyle(color: Colors.white, fontSize: 12),
+                        hintStyle:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                         suffixIcon: IconButton(
                           icon: Icon(
-                              obscurePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.white,
-                          size: 20,),
+                            obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                           onPressed: () {
                             setState(() {
                               obscurePassword = !obscurePassword;

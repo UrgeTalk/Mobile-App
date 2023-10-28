@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
-import 'package:urge/common/widgets/colors.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/common/widgets/elevated_button.dart';
 import 'package:urge/features/auth/controller/auth_controller.dart';
-import 'package:urge/features/auth/views/login.dart';
-import 'package:urge/features/auth/views/reset_password.dart';
 
 class OTPVerification extends StatefulWidget {
   const OTPVerification({super.key, required this.emailAddress});
 
-    final String emailAddress;
-
+  final String emailAddress;
 
   @override
   State<OTPVerification> createState() => _OTPVerificationState();
 }
 
 class _OTPVerificationState extends State<OTPVerification> {
-    final AuthController _authController = Get.put(AuthController());
+  final AuthController _authController = Get.put(AuthController());
 
   final TextEditingController _otpPinController = TextEditingController();
 
@@ -89,7 +85,6 @@ class _OTPVerificationState extends State<OTPVerification> {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               autoDisposeControllers: false,
-            
               enablePinAutofill: true,
               autoFocus: false,
               pinTheme: PinTheme(
@@ -130,9 +125,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 onPressed: () {
                   if (_otpPinController.text.length == 4) {
                     _authController.verifyEmail(
-                        widget.emailAddress,
-                        _otpPinController.text
-                    );
+                        widget.emailAddress, _otpPinController.text);
                   }
                 }),
           ],
