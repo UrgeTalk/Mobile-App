@@ -11,7 +11,6 @@ import 'package:urge/features/home/views/recommended_videos.dart';
 import 'package:urge/features/home/views/saved_videos.dart';
 import 'package:urge/features/home/views/trending_videos.dart';
 import 'package:urge/features/profile/views/profile.dart';
-
 import '../../../common/helpers/snack_bar.dart';
 import '../../../common/widgets/elevated_button.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -242,8 +241,7 @@ class _HomeState extends State<Home> {
       width: 300,
       height: 200,
       decoration: BoxDecoration(
-          color: containerColor,
-      borderRadius: BorderRadius.circular(10)),
+          color: containerColor, borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5),
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -367,7 +365,7 @@ class _HomeState extends State<Home> {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.newRecommendedVideos.isEmpty) {
-            return Center(
+            return const Center(
                 child: Text(
               'No videos',
               style: TextStyle(color: Colors.white),
@@ -391,7 +389,7 @@ class _HomeState extends State<Home> {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.newLatestVideos.isEmpty) {
-            return Center(
+            return const Center(
                 child: Text(
               'No videos',
               style: TextStyle(color: Colors.white),
@@ -415,7 +413,7 @@ class _HomeState extends State<Home> {
           if (_homeController.isLoading.value) {
             return const Center(child: Center());
           } else if (_homeController.newTrendingVideos.isEmpty) {
-            return Center(
+            return const Center(
                 child: Text(
               'No videos',
               style: TextStyle(color: Colors.white),

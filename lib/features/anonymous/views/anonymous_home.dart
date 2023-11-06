@@ -10,6 +10,8 @@ import 'package:urge/features/home/model/home_model.dart';
 import 'package:urge/features/home/views/home_details.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../common/widgets/elevated_button.dart';
+
 class AnonymousHomeScreen extends StatefulWidget {
   const AnonymousHomeScreen({Key? key}) : super(key: key);
 
@@ -204,28 +206,72 @@ class _AnonymousHomeScreenState extends State<AnonymousHomeScreen> {
   }
 
   Widget buildFeaturedVideos() {
-    return SizedBox(
-        height: 250,
-        child: Obx(() {
-          if (_anonymousController.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (_anonymousController.newFeaturedVideos.isEmpty) {
-            return Center(
-                child: Text(
-              'No video',
-              style: TextStyle(color: appBackgroundColor),
-            ));
-          } else {
-            return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _anonymousController.newFeaturedVideos.length,
-                itemBuilder: ((context, index) {
-                  HomeModel video =
-                      _anonymousController.newFeaturedVideos[index];
-                  return featured(video);
-                }));
-          }
-        }));
+    // return SizedBox(
+    //     height: 250,
+    //     child: Obx(() {
+    //       if (_anonymousController.isLoading.value) {
+    //         return const Center(child: CircularProgressIndicator());
+    //       } else if (_anonymousController.newFeaturedVideos.isEmpty) {
+    //         return Center(
+    //             child: Text(
+    //           'No video',
+    //           style: TextStyle(color: appBackgroundColor),
+    //         ));
+    //       } else {
+    //         return ListView.builder(
+    //             scrollDirection: Axis.horizontal,
+    //             itemCount: _anonymousController.newFeaturedVideos.length,
+    //             itemBuilder: ((context, index) {
+    //               HomeModel video =
+    //                   _anonymousController.newFeaturedVideos[index];
+    //               return featured(video);
+    //             }));
+    //       }
+    //     }));
+    return Container(
+      width: 300,
+      height: 200,
+      decoration: BoxDecoration(
+          color: containerColor, borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          const SizedBox(
+            height: 15,
+          ),
+          const Text(
+            'URGE LOLZ 2024 APPLICATION',
+            style: TextStyle(
+                color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          const Text(
+            'Stand a challenge to win N300,000 when you \nsend a short video of your jokes.',
+            style: TextStyle(
+                color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          BtnElevated(
+            btnWidth: 150,
+            btnHeight: 30,
+            onPressed: () {
+              becomeMemberDialog();
+            },
+            child: Text(
+              'APPLY NOW',
+              style: GoogleFonts.openSans(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14),
+            ),
+          ),
+        ]),
+      ),
+    );
   }
 
   Widget buildRecommendedVideos() {
