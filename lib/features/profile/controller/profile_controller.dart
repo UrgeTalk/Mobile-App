@@ -104,8 +104,6 @@ class ProfileController extends GetxController with BaseController {
     request.headers['Authorization'] = 'Bearer $token';
     print(request.headers);
 
-    print('hello');
-
     // multipart that takes file.. here this "image_file" is a key of the API request
     var multipartFile = http.MultipartFile('file', stream, length,
         filename: path.basename(image.path));

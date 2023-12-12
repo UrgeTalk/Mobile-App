@@ -47,6 +47,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    introdata.writeIfNull("display", false);
     introdata.writeIfNull("access", '');
 
   }

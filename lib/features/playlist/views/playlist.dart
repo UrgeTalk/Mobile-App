@@ -6,6 +6,7 @@ import 'package:urge/common/widgets/colors.dart';
 import 'package:get/get.dart';
 import 'package:urge/features/playlist/controller/playlist_controller.dart';
 import 'package:urge/features/playlist/model/playlist_model.dart';
+import 'package:urge/features/playlist/views/playlist_details.dart';
 import '../../auth/controller/auth_controller.dart';
 import 'package:urge/features/home/views/saved_videos.dart';
 import '../../profile/views/profile.dart';
@@ -27,7 +28,7 @@ class _PlaylistState extends State<Playlist> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _playlistController.getAllPlaylist();
-      _playlistController.allNewPlaylist.value = _playlistController.allPlaylist;
+            _playlistController.allNewPlaylist.value = _playlistController.allPlaylist;
           });
     super.initState();
   }
@@ -107,7 +108,7 @@ class _PlaylistState extends State<Playlist> {
             const SizedBox(
               height: 10,
             ),
-            Text('View all collection of videos just for you',
+            Text('View all collection of playlist just for you',
                 style: GoogleFonts.openSans(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -143,7 +144,7 @@ class _PlaylistState extends State<Playlist> {
   Widget allPlaylist(PlaylistModel _model) {
     return GestureDetector(
       onTap: (){
-
+         Get.to(()=> PlaylistDetails(model: _model));
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -165,26 +166,30 @@ class _PlaylistState extends State<Playlist> {
                               fit: BoxFit.cover,
                             ),
                           )),
-                      Align(
-                        alignment: Alignment.bottomLeft,
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
                         child: Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 5),
+                          padding: const EdgeInsets.all(5),
                           child: Row(
                             children: [
-                              Image.asset('assets/images/playlist_icon.png',
-                              height: 25, width: 25,),
+                              Image.asset(
+                                'assets/images/playlist_icon.png',
+                                height: 25,
+                                width: 25,
+                              ),
                               const SizedBox(width: 5),
                               Text(
                                 '${_model.episodeCount!.toString()} Episodes',
                                 style: const TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: "OpenSans",
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14),
+                                  color: Colors.white,
+                                  fontFamily: "OpenSans",
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14,
+                                ),
                               ),
                             ],
-                          )
+                          ),
                         ),
                       )
                     ],
@@ -226,6 +231,8 @@ class _PlaylistState extends State<Playlist> {
       ),
     );
   }
+
+
 }
 
 class ShimmerLoadingList extends StatelessWidget {

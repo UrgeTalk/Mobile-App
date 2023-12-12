@@ -13,7 +13,9 @@ class PlaylistController extends GetxController with BaseController {
   var errorMessage = ''.obs;
   var allPlaylist = <PlaylistModel>[].obs;
   var allNewPlaylist = <PlaylistModel>[].obs;
-  var episodes = <EpisodeModel>[].obs;
+  var allEpisodes = <PlaylistModel>[].obs;
+  var allNewEpisodes = <PlaylistModel>[].obs;
+
 
   void getAllPlaylist() {
     isListLoading(true);
@@ -35,16 +37,17 @@ class PlaylistController extends GetxController with BaseController {
     });
   }
 
-  void getAllEpisodes(EpisodeModel model){
+  void getAllEpisodes(PlaylistModel model){
     isListLoading(true);
     _playlistService.getAllPlaylistEpisodes(model.id).then((value) {
       try {
         if(value['message'] == "Ok") {
-          var allEpisodes =
-              List<EpisodeModel>.from((value['data']).map((x) => EpisodeModel.fromMap(x)));
-          episodes.value = allEpisodes;
-          print(episodes.length);
+          var episodes =
+              List<PlaylistModel>.from((value['data']).map((x) => PlaylistModel.fromMap(x)));
+          allEpisodes.value = episodes;
+          print(allEpisodes.length);
           isListLoading(false);
+          update(['episodes']);
         }
       }
       catch (error) {

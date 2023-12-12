@@ -3,12 +3,14 @@
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/helpers/date_util.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
 import 'package:urge/features/home/model/home_model.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 
 class HomeDetails extends StatefulWidget {
   const HomeDetails({super.key, required this.model});
@@ -20,7 +22,6 @@ class HomeDetails extends StatefulWidget {
 }
 
 class _HomeDetailsState extends State<HomeDetails> {
-
   final HomeController _homeController = Get.put(HomeController());
 
   late final FlickManager flickManager;
@@ -28,6 +29,8 @@ class _HomeDetailsState extends State<HomeDetails> {
   bool isClicked = false;
   bool isLiked = false;
   bool isPlaying = false;
+
+  double? _progress;
 
   @override
   void initState() {
@@ -147,29 +150,48 @@ class _HomeDetailsState extends State<HomeDetails> {
                           ),
                           Row(
                             children: [
-                              SizedBox(
-                                height: 45,
-                                child: Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Icon(
-                                        Icons.download_outlined,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 3,
-                                    ),
-                                    Text(
-                                      'Download',
-                                      style: GoogleFonts.openSans(
+                              GestureDetector(
+                                onTap: () {
+                                  FileDownloader.downloadFile(
+                                      url: widget.model.video!,
+                                      onDownloadError: (String error){
+                                        print('Download Error: $error');
+                                      },
+                                      notificationType: NotificationType.all,
+                                      onProgress: (name, progress) {
+                                        setState(() {
+                                          _progress = progress;
+                                        });
+                                      },
+                                      onDownloadCompleted: (value) {
+                                        final File file = File(value);
+                                        print(file);
+                                      });
+                                },
+                                child: SizedBox(
+                                  height: 45,
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: Icon(
+                                          Icons.download_outlined,
                                           color: Colors.white,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 3,
+                                      ),
+                                      Text(
+                                        'Download',
+                                        style: GoogleFonts.openSans(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               const SizedBox(

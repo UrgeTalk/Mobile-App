@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:urge/features/home/controller/home_controller.dart';
@@ -23,6 +24,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final introdata = GetStorage();
   final HomeController _homeController = Get.put(HomeController());
   final AuthController _authController = Get.put(AuthController());
 
@@ -30,6 +32,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
+    introdata.write('display', true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _authController.getProfile();
       _homeController.getAllVideos();
@@ -269,7 +272,7 @@ class _HomeState extends State<Home> {
             btnHeight: 30,
             onPressed: () {
               UrgeSnackBar.launchURL(
-                  Get.context!, "https://urgetalks.com/competition");
+                  Get.context!, "https://forms.gle/JCDfeizJbF67jqJE6");
             },
             child: Text(
               'APPLY NOW',

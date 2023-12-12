@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:urge/common/helpers/get_storage.dart';
 import 'package:urge/common/widgets/bottom_nav.dart';
 import 'package:urge/common/widgets/colors.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ import 'package:urge/common/widgets/new_bottom_nav.dart';
 import 'package:urge/features/auth/views/forgot_password.dart';
 import 'package:urge/features/auth/views/login.dart';
 import 'package:urge/features/auth/views/reset_password.dart';
+import 'package:urge/features/splash/root.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,9 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    LocalStorage().init();
     Timer(
-        const Duration(seconds: 3), () => Get.off(() => const NewBottomBar()));
+        const Duration(seconds: 3), () => Get.off(() => Root()));
   }
+
+  final introdata = GetStorage();
 
   @override
   Widget build(BuildContext context) {

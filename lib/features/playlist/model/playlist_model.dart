@@ -6,6 +6,7 @@ class PlaylistModel {
   String? description;
   String? cover;
   String? speaker;
+  String? video;
 
   PlaylistModel({
     this.id,
@@ -13,7 +14,8 @@ class PlaylistModel {
     this.title,
     this.description,
     this.cover,
-    this.speaker
+    this.speaker,
+    this.video,
 });
 
   Map<String, dynamic> toMap(){
@@ -23,7 +25,8 @@ class PlaylistModel {
       "title": title,
       "description": description,
       "cover": cover,
-      "speaker": speaker
+      "speaker": speaker,
+      "video": video,
     };
   }
 
@@ -34,7 +37,8 @@ class PlaylistModel {
       title: map['title'],
       description: map['description'],
       cover: map['cover'],
-      speaker: map['speaker']
+      speaker: map['speaker'],
+      video: map['video']
     );
   }
 }
